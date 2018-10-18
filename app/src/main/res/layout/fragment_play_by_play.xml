@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    >
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.135pt"
+        android:background="#E5DDE5"
+        />
+
+    <RelativeLayout
+        android:id="@+id/drop_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:spinnerMode="dropdown"
+        android:background="@android:color/white"
+        >
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8.1pt"
+            android:layout_marginLeft="80.235pt"
+            android:layout_marginTop="8.685pt"
+            android:gravity="center"
+            android:text="menu"
+            android:textSize="7.515pt"
+            android:textColor="@color/colorCustomTitle"
+            />
+
+        <ImageView
+            android:id="@+id/iv1"
+            android:layout_width="5.265pt"
+            android:layout_height="3.285pt"
+            android:layout_marginBottom="9pt"
+            android:layout_marginLeft="11.385pt"
+            android:layout_marginTop="11.565pt"
+            android:layout_toRightOf="@+id/tv1"
+            android:background="@mipmap/drop_down_arrow" />
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.135pt"
+        android:layout_marginLeft="2.385pt"
+        android:background="#E5DDE5"
+        />
+    <ListView
+        android:id="@+id/lv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#E5DDE5"
+        android:layout_alignParentBottom="true"
+        />
+</LinearLayout>

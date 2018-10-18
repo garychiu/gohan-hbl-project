@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#a72429</color>
+    <color name="colorPrimaryDark">#a72429</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorCustomTitleapha8">#a72429</color>
+    <color name="colorCustomTitle">#a72429</color>
+    <color name="colorCustomTabTextSelected">#a72429</color>
+    <color name="colorCustomTabTextUnSelected">#646464</color>
+    <color name="colorToggleTextUnSelected">#999999</color>
+    <color name="colorRadioButtonSelected">#C90008</color>
+</resources>

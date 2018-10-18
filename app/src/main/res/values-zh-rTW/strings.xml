@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">HBL</string>
+    <string name="title_games">賽事</string>
+    <string name="title_dashboard">排名</string>
+    <string name="title_analysis">統計</string>
+    <string name="game_data">數據</string>
+    <string name="play_by_play">PLAY BY PLAY</string>
+    <string name="player">球員</string>
+    <string name="time">時間</string>
+    <string name="score">得分</string>
+    <string name="rebound">籃板</string>
+    <string name="rebound1">籃板</string>
+    <string name="assist">助攻</string>
+    <string name="team">球隊</string>
+    <string name="win">勝</string>
+    <string name="lose">負</string>
+    <string name="raking">排名</string>
+    <string name="personal">個人</string>
+    <string name="group">團體</string>
+
+    <string name="team_man">男子組</string>
+    <string name="team_woman">女子組</string>
+    <string name="qualifying">資格賽</string>
+    <string name="preliminaries">預賽</string>
+    <string name="remach">複賽</string>
+    <string name="semi_final">準決賽</string>
+    <string name="finals">決賽</string>
+
+    <string name="offensive_score">進攻得分</string>
+    <string name="defensive_score">防守失分</string>
+    <string name="two_pointer">二分球</string>
+    <string name="three_pointer">三分球</string>
+
+    <string name="team2">隊伍</string>
+    <string name="game_completed">已賽</string>
+</resources>
