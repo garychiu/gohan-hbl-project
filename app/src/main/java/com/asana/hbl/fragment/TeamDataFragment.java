@@ -27,7 +27,6 @@ public class TeamDataFragment extends Fragment {
 
     private static final int TEAM_HOME = 0;
     private static final int TEAM_AWAY = 1;
-    private TextView mTextView;
     private static int selectedTeam = 0;
     private HBLSingleGameData mHBLSingleGameData;
     private ExpandableListAdapter mListAdapter;

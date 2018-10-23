@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -64,8 +65,21 @@ public class MainActivity extends BaseActivity {
         toolbar.setPadding(0, 0, 0, 0);
     }
     private void initViews(){
+        FragmentTransaction beginTransaction = getSupportFragmentManager().beginTransaction();
+        Fragment gameFragment = GameFragment.newInsTance();
+        Fragment dashboardFragment = DashboardFragment.newInsTance();
+        Fragment analysisFragment = AnalysisFragment.newInsTance();
+        beginTransaction
+                .add(R.id.content, gameFragment, GameFragment.TAG)
+                .add(R.id.content, dashboardFragment, DashboardFragment.TAG)
+                .add(R.id.content, analysisFragment, AnalysisFragment.TAG)
+                .show(gameFragment)
+                .hide(dashboardFragment)
+                .hide(analysisFragment)
+                .commit();
+        mCurrentFragment = gameFragment;
         mTitle = (TextView) findViewById(R.id.title);
-        showNav(R.id.navigation_games);
+        //showNav(R.id.navigation_games);
     }
     Fragment mCurrentFragment;
     private void showNav(int navid){

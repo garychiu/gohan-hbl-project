@@ -205,16 +205,16 @@ public class SingleGameActivity extends BaseActivity {
             Fragment fragment;
             switch(position){
                 case 0:
-                    fragment = new SingleGameFragment().newInsTance();
+                    fragment = SingleGameFragment.newInsTance();
                     break;
                 case 1:
-                    fragment = new SingleGameDataFregment().newInsTance();
+                    fragment = SingleGameDataFregment.newInsTance();
                     break;
                 case 2:
-                    fragment = new PlayByPlayFragment().newInsTance();
+                    fragment = PlayByPlayFragment.newInsTance();
                     break;
                 default:
-                    fragment = new DashboardFragment().newInsTance();
+                    fragment = DashboardFragment.newInsTance();
                     break;
             }
             Bundle args = new Bundle();

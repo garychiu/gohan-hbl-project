@@ -65,7 +65,7 @@ public class GameFragment extends Fragment {
         mGamesSpinner = (RelativeLayout)view.findViewById(R.id.spinner_games);
         mTitle = (TextView)view.findViewById(R.id.titles);
         mDreoDownIndicator = (ImageView)view.findViewById(R.id.indicator);
-        mList.add("所有賽事");
+        mList.add(getResources().getString(R.string.all_games));
 
         mListPop = new ListPopupWindow(getActivity());
         mListPop.setAdapter(new ArrayAdapter<String>(getActivity(), R.layout.expandable_list_item, mList));
@@ -78,9 +78,9 @@ public class GameFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mTitle.setText(mList.get(position));
-                mDataList.clear();
-                mTabLayout.removeAllTabs();
-                mViewPager.setAdapter(null);
+                //mDataList.clear();
+                //mTabLayout.removeAllTabs();
+               //mViewPager.setAdapter(null);
                 if(position == 0){
                     getAllGames(RestApi.SEASON_SN);
                 }else{
@@ -231,6 +231,7 @@ public class GameFragment extends Fragment {
         Iterator<String> keys =  jsonObject.keys();
         mDataList.clear();
         mTabLayout.removeAllTabs();
+        mViewPager.setAdapter(null);
         long currentTime= System.currentTimeMillis();
         int nearestGame = 0;
         long  timeDiff = 0;
@@ -308,7 +309,7 @@ public class GameFragment extends Fragment {
 
         @Override
         public Fragment getItem(int position) {
-            Fragment fragment = new GameListFragment().newInsTance();
+            Fragment fragment = GameListFragment.newInsTance();
             Bundle args = new Bundle();
             args.putString("arg", mDataList.get(position).toString());
             fragment.setArguments(args);

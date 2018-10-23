@@ -60,5 +60,7 @@
     <string name="ppg">PPG</string>
     <string name="rank">RANK</string>
 
+    <string name="all_games">All Games</string>
+
 
 </resources>

@@ -44,7 +44,6 @@ public class DashboardFragment extends Fragment {
     JSONArray mData;
     RelativeLayout mDropMenu1, mDropMenu2;
     private ListPopupWindow mListPop1, mListPop2;
-    private ListPopupWindow mListPopGender, mListPopName;
     TextView mTv1, mTv2;
     private ImageView mDreoDownIndicator1, mDreoDownIndicator2;
     private List<String > mListGender = new ArrayList<String>();
