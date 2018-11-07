@@ -6,10 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.asana.hbl.R;;
+import com.asana.hbl.R;
 import com.asana.hbl.utils.HBLImageLoader;
+import com.asana.hbl.utils.Utils;
 import com.asana.hbl.views.CircularImageView;
 
 import org.json.JSONArray;
@@ -29,13 +31,15 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private class ViewHolder {
         TextView txt1,txt2, txt3, txt4, txt5;
         CircularImageView image_player;
-        public ViewHolder(TextView txt1, TextView txt2, TextView txt3, TextView txt4, TextView txt5, CircularImageView imagePlayer){
+        ImageView nav_arrow;
+        public ViewHolder(TextView txt1, TextView txt2, TextView txt3, TextView txt4, TextView txt5, CircularImageView imagePlayer, ImageView navArrow){
             this.txt1 = txt1;
             this.txt2 = txt2;
             this.txt3 = txt3;
             this.txt4 = txt4;
             this.txt5 = txt5;
             this.image_player = imagePlayer;
+            this.nav_arrow = navArrow;
         }
     }
 
@@ -122,7 +126,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                     (TextView) convertView.findViewById(R.id.tv3),
                     (TextView) convertView.findViewById(R.id.tv4),
                     (TextView) convertView.findViewById(R.id.tv5),
-                    (CircularImageView) convertView.findViewById(R.id.image_player)
+                    (CircularImageView) convertView.findViewById(R.id.image_player),
+                    (ImageView)convertView.findViewById(R.id.nav_arrow)
             );
             convertView.setTag(holder);
         }else{
@@ -156,8 +161,24 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String playerImgUrl = "";
+        String playerImgUrl = null;
+        try {
+            playerImgUrl = ((JSONObject)getGroup(groupPosition)).getString("profile_picture");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         HBLImageLoader.loadPlayerImage(mContext, playerImgUrl, holder.image_player);
+        if(isExpanded) {
+            holder.nav_arrow.animate()
+                    .setDuration(Utils.ROTATION_ANIM_DURATION)
+                    .rotation(180)
+                    .start();
+        }else{
+            holder.nav_arrow.animate()
+                    .setDuration(Utils.ROTATION_ANIM_DURATION)
+                    .rotation(0)
+                    .start();
+        }
         return convertView;
     }
 

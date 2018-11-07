@@ -11,6 +11,8 @@ import com.asana.hbl.utils.NetworkUtil;
 import com.asana.hbl.utils.RestApi;
 import com.asana.hbl.utils.Utils;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by Gary on 2018/10/9.
  */

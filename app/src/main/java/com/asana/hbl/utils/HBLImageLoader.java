@@ -17,7 +17,6 @@ public class HBLImageLoader {
                 .getImageLoader();
         imageLoader.get(imageUrl, ImageLoader.getImageListener(v,
                 R.mipmap.team_default, R.mipmap.team_default));
-        v.setImageUrl(imageUrl, imageLoader);
     }
 
     public static void loadPlayerImage(Context context, String imageUrl, NetworkImageView v){
@@ -25,6 +24,5 @@ public class HBLImageLoader {
                 .getImageLoader();
         imageLoader.get(imageUrl, ImageLoader.getImageListener(v,
                 R.mipmap.player_default, R.mipmap.player_default));
-        v.setImageUrl(imageUrl, imageLoader);
     }
 }

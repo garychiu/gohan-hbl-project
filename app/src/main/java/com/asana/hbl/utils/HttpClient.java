@@ -24,7 +24,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 public class HttpClient {
     public static final String TAG = "HBL-HttpClient";
     private final int READ_TIMEOUT = 10000;  //ms
-    private final int CONN_TIMEOUT = 15000;  //ms
+    private final int CONN_TIMEOUT = 5000;  //ms
     private final int ACTION_QUERY_GET = 101;
     private final int ACTION_SEND_POST = 102;
 
