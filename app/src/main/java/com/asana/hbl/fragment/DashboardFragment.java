@@ -32,6 +32,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -42,12 +43,14 @@ public class DashboardFragment extends Fragment {
     public static final String TAG = "HBL-DashboardFragment";
     ListView mListView;
     JSONArray mData;
+    JSONArray mStageList, mGroupList;
     RelativeLayout mDropMenu1, mDropMenu2;
     private ListPopupWindow mListPop1, mListPop2;
     TextView mTv1, mTv2;
     private ImageView mDreoDownIndicator1, mDreoDownIndicator2;
     private List<String > mListGender = new ArrayList<String>();
-    private List<String > mListName= new ArrayList<String>();
+    HashMap<String, String> mListGenderF = new HashMap<String, String>();
+    HashMap<String, String> mListGenderM = new HashMap<String, String>();
     public static DashboardFragment newInsTance(){
         DashboardFragment fragment = new DashboardFragment();
         return fragment;
@@ -68,11 +71,6 @@ public class DashboardFragment extends Fragment {
         mListGender.add(getResources().getString(R.string.team_man));
         mListGender.add(getResources().getString(R.string.team_woman));
 
-        mListName.add(getResources().getString(R.string.qualifying));
-        mListName.add(getResources().getString(R.string.preliminaries));
-        mListName.add(getResources().getString(R.string.remach));
-        mListName.add(getResources().getString(R.string.semi_final));
-        mListName.add(getResources().getString(R.string.finals));
         ArrayAdapter<String> adapter1 = new ArrayAdapter<String>(getActivity(), R.layout.expandable_list_item, mListGender);
         mListPop1 = new ListPopupWindow(getActivity());
         mListPop1.setAdapter(adapter1);
@@ -86,7 +84,11 @@ public class DashboardFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mTv1.setText(mListGender.get(position));
-                getDataList(mTv1.getText().toString(), mTv2.getText().toString());
+                if(mListGender.get(position).equals(getResources().getString(R.string.team_man))){
+                    updateStageList(mListGenderM);
+                }else if(mListGender.get(position).equals(getResources().getString(R.string.team_woman))){
+                    updateStageList(mListGenderF);
+                }
                 mListPop1.dismiss();
             }
         });
@@ -110,86 +112,14 @@ public class DashboardFragment extends Fragment {
                 mListPop1.show();
             }
         });
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActivity(), R.layout.expandable_list_item, mListName);
-        mListPop2 = new ListPopupWindow(getActivity());
-        mListPop2.setAdapter(adapter2);
-        mListPop1.setWidth(Utils.measureContentWidth(getContext(), adapter2));
-        mListPop2.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        mListPop2.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(getActivity(), android.R.color.white)));
-        mListPop2.setAnchorView(mDropMenu2);
-        mListPop2.setModal(true);
-        mListPop2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mTv2.setText(mListName.get(position));
-                getDataList(mTv1.getText().toString(), mTv2.getText().toString());
-                mListPop2.dismiss();
-            }
-        });
 
-        mListPop2.setOnDismissListener(new PopupWindow.OnDismissListener(){
-            @Override
-            public void onDismiss() {
-                mDreoDownIndicator2.animate()
-                        .setDuration(Utils.ROTATION_ANIM_DURATION)
-                        .rotationBy(180)
-                        .start();
-            }
-        });
-
-
-        mDropMenu2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDreoDownIndicator2.animate()
-                        .setDuration(Utils.ROTATION_ANIM_DURATION)
-                        .rotationBy(180)
-                        .start();
-                mListPop2.show();
-            }
-        });
 
         mTv1.setText(mListGender.get(0));
-        mTv2.setText(mListName.get(0));
-
-        getDataList(mTv1.getText().toString(), mTv2.getText().toString());
-
+        getStageList();
         return view;
     }
 
-    private void getDataList(String selectedGender, String selectedName){
-        String stageSN = "";
-        if(selectedGender.equals(getResources().getString(R.string.team_man))
-                && selectedName.equals(getResources().getString(R.string.qualifying))){
-            stageSN = "1";
-        }else if(selectedGender.equals(getResources().getString(R.string.team_woman))
-                && selectedName.equals(getResources().getString(R.string.qualifying))){
-            stageSN = "6";
-        }else if(selectedGender.equals(getResources().getString(R.string.team_man))
-                && selectedName.equals(getResources().getString(R.string.preliminaries))){
-            stageSN = "2";
-        }else if(selectedGender.equals(getResources().getString(R.string.team_woman))
-                && selectedName.equals(getResources().getString(R.string.preliminaries))){
-            stageSN = "7";
-        }else if(selectedGender.equals(getResources().getString(R.string.team_man))
-                && selectedName.equals(getResources().getString(R.string.remach))){
-            stageSN = "3";
-        }else if(selectedGender.equals(getResources().getString(R.string.team_woman))
-                && selectedName.equals(getResources().getString(R.string.remach))){
-            stageSN = "8";
-        }else if(selectedGender.equals(getResources().getString(R.string.team_man))
-                && selectedName.equals(getResources().getString(R.string.semi_final))){
-            stageSN = "4";
-        }else if(selectedGender.equals(getResources().getString(R.string.team_woman))
-                && selectedName.equals(getResources().getString(R.string.semi_final))){
-            stageSN = "9";
-        }else if(selectedGender.equals(getResources().getString(R.string.team_man))
-                && selectedName.equals(getResources().getString(R.string.finals))){
-            stageSN = "5";
-        }else if(selectedGender.equals(getResources().getString(R.string.team_woman))
-                && selectedName.equals(getResources().getString(R.string.finals))){
-            stageSN = "10";
-        }
+    private void getDataList(String stageSN){
         HttpClient httpClient = new HttpClient();
         HttpClient.HttpResponseCallback callback = new HttpClient.HttpResponseCallback() {
             @Override
@@ -305,5 +235,108 @@ public class DashboardFragment extends Fragment {
 
             return convertView;
         }
+    }
+
+
+    private void getStageList(){
+        HttpClient httpClient = new HttpClient();
+        HttpClient.HttpResponseCallback callback = new HttpClient.HttpResponseCallback() {
+            @Override
+            public void onResponse(Bundle result) {
+                try {
+                    mStageList = new JSONArray(result.getString("response"));
+                    if(getActivity() != null) {
+                        for(int i=0; i<mStageList.length(); i++){
+                            try {
+                                JSONObject jsonObject = (JSONObject)mStageList.get(i);
+                                String gender = jsonObject.getString("gender");
+                                if(gender.equals("M")){
+                                    mListGenderM.put(jsonObject.getString("name"), jsonObject.getString("sn"));
+                                }else if(gender.equals("F")) {
+                                    mListGenderF.put(jsonObject.getString("name"), jsonObject.getString("sn"));
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        if(mTv1.getText().toString().equals(getResources().getString(R.string.team_man))){
+                            updateStageList(mListGenderM);
+                        }else if(mTv1.getText().toString().equals(getResources().getString(R.string.team_woman))){
+                            updateStageList(mListGenderF);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+        httpClient.async_query_GET(RestApi.getStageList(RestApi.SEASON_SN), null, callback);
+    }
+
+    private void updateStageList(final HashMap<String, String> map){
+        final List<String> list = new ArrayList<String>();
+        for ( String key : map.keySet() ) {
+            list.add(key);
+        }
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(getActivity(), R.layout.expandable_list_item, list);
+        mListPop2 = new ListPopupWindow(getActivity());
+        mListPop2.setAdapter(adapter2);
+        mListPop2.setWidth(Utils.measureContentWidth(getContext(), adapter2));
+        mListPop2.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        mListPop2.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(getActivity(), android.R.color.white)));
+        mListPop2.setAnchorView(mDropMenu2);
+        mListPop2.setModal(true);
+        mListPop2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mTv2.setText(list.get(position));
+                getDataList(map.get(mTv2.getText().toString()));
+                mListPop2.dismiss();
+            }
+        });
+
+        mListPop2.setOnDismissListener(new PopupWindow.OnDismissListener(){
+            @Override
+            public void onDismiss() {
+                mDreoDownIndicator2.animate()
+                        .setDuration(Utils.ROTATION_ANIM_DURATION)
+                        .rotationBy(180)
+                        .start();
+            }
+        });
+
+
+        mDropMenu2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDreoDownIndicator2.animate()
+                        .setDuration(Utils.ROTATION_ANIM_DURATION)
+                        .rotationBy(180)
+                        .start();
+                mListPop2.show();
+            }
+        });
+        mTv2.setText(list.get(0));
+        getGroupListByStage(map.get(mTv2.getText().toString()));
+        //getDataList(map.get(mTv2.getText().toString()));
+    }
+
+    private void getGroupListByStage(String stageSn){
+        HttpClient httpClient = new HttpClient();
+        HttpClient.HttpResponseCallback callback = new HttpClient.HttpResponseCallback() {
+            @Override
+            public void onResponse(Bundle result) {
+                try {
+                    mGroupList = new JSONArray(result.getString("response"));
+                    if(getActivity() != null) {
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+        httpClient.async_query_GET(RestApi.getGroupListByStage(stageSn), null, callback);
     }
 }

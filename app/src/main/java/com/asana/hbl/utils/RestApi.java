@@ -28,4 +28,20 @@ public class RestApi {
     public static String getTeamListByStage(String sn){
         return BASE_URI + "/rest/team/listbystage/" + sn + "?key=AIzaSyC_oI-W4XFOxqYu33e3Yg773ZAjt-NY5rk";
     }
+
+    public static String getStageList(String season){
+        return BASE_URI + "/rest/stage/list/" + season + "?key=AIzaSyC_oI-W4XFOxqYu33e3Yg773ZAjt-NY5rk";
+    }
+
+    public static String getGroupListByStage(String sn){
+        return BASE_URI + "/rest/group/listbystage/" + sn + "?key=AIzaSyC_oI-W4XFOxqYu33e3Yg773ZAjt-NY5rk";
+    }
+
+    public static String getRosterAverageListByStageAndGroup(String stageSn, String groupSn, String eventName, int returnCount){
+        return BASE_URI + "/rest/roster/averagelistbystageandgroup/" + stageSn + "/" + groupSn +  "/" + eventName + "/" + returnCount +"?key=AIzaSyC_oI-W4XFOxqYu33e3Yg773ZAjt-NY5rk";
+    }
+
+    public static String getTeamAverageListByStageAndGroup(String stageSn, String groupSn, String eventName, int returnCount){
+        return BASE_URI + "/rest/roster/averagelistbystageandgroup/" + stageSn + "/" + groupSn +  "/" + eventName + "/" + returnCount +"?key=AIzaSyC_oI-W4XFOxqYu33e3Yg773ZAjt-NY5rk";
+    }
 }

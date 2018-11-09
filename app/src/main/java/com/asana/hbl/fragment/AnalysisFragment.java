@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,8 @@ import android.widget.TextView;
 
 import com.asana.hbl.R;
 import com.asana.hbl.utils.HBLImageLoader;
+import com.asana.hbl.utils.HttpClient;
+import com.asana.hbl.utils.RestApi;
 import com.asana.hbl.utils.Utils;
 import com.asana.hbl.views.CircularImageView;
 
@@ -42,13 +45,16 @@ import java.util.Vector;
 
 public class AnalysisFragment extends Fragment {
     public static final String TAG = "HBL-AnalysisFragment";
-    private List<String > mListGender = new ArrayList<String>();
-    private ListPopupWindow mListPop;
-    TextView mTv1;
-    RelativeLayout mDropMenu;
+    private  final String EVENT_NAME = "point";
+    private ListPopupWindow mListPop, mListPop2, mListPop3;
+    TextView mTv1, mTv2, mTv3;
+    JSONArray mStageList, mGroupList;
+    JSONArray mData;
+    int mSelectedStage, mSelectedGroup;
+    RelativeLayout mDropMenu, mDropMenu2, mDropMenu3;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
-    private ImageView mDreoDownIndicator;
+    private ImageView mDreoDownIndicator, mDreoDownIndicator2, mDreoDownIndicator3;
     public static AnalysisFragment newInsTance(){
         AnalysisFragment fragment = new AnalysisFragment();
         return fragment;
@@ -65,32 +71,47 @@ public class AnalysisFragment extends Fragment {
     }
 
     private void initDropMenu(View view){
+        //DropMenu1
         mDropMenu = (RelativeLayout)view.findViewById(R.id.drop_menu);
         mDreoDownIndicator = (ImageView) view.findViewById(R.id.iv1);
         mTv1 = (TextView)view.findViewById(R.id.tv1);
 
-        mListGender.add(getResources().getString(R.string.team_man));
-        mListGender.add(getResources().getString(R.string.team_woman));
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.expandable_list_item, mListGender);
-        mListPop = new ListPopupWindow(getActivity());
-        mListPop.setAdapter(adapter);
-        mListPop.setWidth(Utils.measureContentWidth(getContext(), adapter));
-        mListPop.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
-        mListPop.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(getActivity(), android.R.color.white)));
-        mListPop.setAnchorView(mDropMenu);
-        mListPop.setModal(true);
-        mListPop.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        //DropMenu2
+        mDropMenu2 = (RelativeLayout)view.findViewById(R.id.drop_menu2);
+        mDreoDownIndicator2 = (ImageView) view.findViewById(R.id.iv2);
+        mTv2 = (TextView)view.findViewById(R.id.tv2);
+
+        getStageList();
+
+        //DropMenu3
+        mDropMenu3 = (RelativeLayout)view.findViewById(R.id.drop_menu3);
+        mDreoDownIndicator3 = (ImageView) view.findViewById(R.id.iv3);
+        mTv3 = (TextView)view.findViewById(R.id.tv3);
+
+        List<String > list3 = new ArrayList<String>();
+        list3.add(getResources().getString(R.string.group));
+        list3.add(getResources().getString(R.string.personal));
+        ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(getActivity(), R.layout.expandable_list_item, list3);
+        mListPop3 = new ListPopupWindow(getActivity());
+        mListPop3.setAdapter(adapter3);
+        mListPop3.setWidth(Utils.measureContentWidth(getContext(), adapter3));
+        mListPop3.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        mListPop3.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(getActivity(), android.R.color.white)));
+        mListPop3.setAnchorView(mDropMenu3);
+        mListPop3.setModal(true);
+        mListPop3.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mTv1.setText(mListGender.get(position));
-                mListPop.dismiss();
+                mTv3.setText((String)parent.getAdapter().getItem(position));
+                mListPop3.dismiss();
             }
         });
 
-        mListPop.setOnDismissListener(new PopupWindow.OnDismissListener(){
+        mListPop3.setOnDismissListener(new PopupWindow.OnDismissListener(){
             @Override
             public void onDismiss() {
-                mDreoDownIndicator.animate()
+                mDreoDownIndicator3.animate()
                         .setDuration(Utils.ROTATION_ANIM_DURATION)
                         .rotationBy(180)
                         .start();
@@ -98,17 +119,18 @@ public class AnalysisFragment extends Fragment {
         });
 
 
-        mDropMenu.setOnClickListener(new View.OnClickListener() {
+        mDropMenu3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDreoDownIndicator.animate()
+                mDreoDownIndicator3.animate()
                         .setDuration(Utils.ROTATION_ANIM_DURATION)
                         .rotationBy(180)
                         .start();
-                mListPop.show();
+                mListPop3.show();
             }
         });
-        mTv1.setText(mListGender.get(0));
+        mTv3.setText((String)adapter3.getItem(0));
+
     }
 
     private void initTabLayout(View view){
@@ -303,5 +325,181 @@ public class AnalysisFragment extends Fragment {
            */
             return convertView;
         }
+    }
+
+    private void getStageList(){
+        HttpClient httpClient = new HttpClient();
+        HttpClient.HttpResponseCallback callback = new HttpClient.HttpResponseCallback() {
+            @Override
+            public void onResponse(Bundle result) {
+                try {
+                    mStageList = new JSONArray(result.getString("response"));
+                    if(getActivity() != null) {
+                        List<String > list1 = new ArrayList<String>();
+                        for(int i=0; i<mStageList.length(); i++){
+                            try {
+                                JSONObject jsonObject = (JSONObject)mStageList.get(i);
+                                list1.add(jsonObject.getString("name"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.expandable_list_item, list1);
+                        mListPop = new ListPopupWindow(getActivity());
+                        mListPop.setAdapter(adapter);
+                        mListPop.setWidth(Utils.measureContentWidth(getContext(), adapter));
+                        mListPop.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+                        mListPop.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(getActivity(), android.R.color.white)));
+                        mListPop.setAnchorView(mDropMenu);
+                        mListPop.setModal(true);
+                        mListPop.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                mTv1.setText((String)parent.getAdapter().getItem(position));
+                                mSelectedStage = position;
+                                String selectedGender;
+                                try {
+                                    JSONObject jsonObject = (JSONObject)mStageList.get(position);
+                                    getGroupListByStage(jsonObject.getString("sn"));
+                                    selectedGender = jsonObject.getString("gender");
+                                    Log.v("Gary", "selectedSN: " + jsonObject.getString("sn"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                                mListPop.dismiss();
+                            }
+                        });
+
+                        mListPop.setOnDismissListener(new PopupWindow.OnDismissListener(){
+                            @Override
+                            public void onDismiss() {
+                                mDreoDownIndicator.animate()
+                                        .setDuration(Utils.ROTATION_ANIM_DURATION)
+                                        .rotationBy(180)
+                                        .start();
+                            }
+                        });
+
+
+                        mDropMenu.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mDreoDownIndicator.animate()
+                                        .setDuration(Utils.ROTATION_ANIM_DURATION)
+                                        .rotationBy(180)
+                                        .start();
+                                mListPop.show();
+                            }
+                        });
+                        mTv1.setText((String)adapter.getItem(0));
+                        JSONObject jsonObject = (JSONObject)mStageList.get(0);
+                        getGroupListByStage(jsonObject.getString("sn"));
+                        mSelectedStage = 0;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+        httpClient.async_query_GET(RestApi.getStageList(RestApi.SEASON_SN), null, callback);
+    }
+
+    private void getGroupListByStage(String stageSn){
+        HttpClient httpClient = new HttpClient();
+        HttpClient.HttpResponseCallback callback = new HttpClient.HttpResponseCallback() {
+            @Override
+            public void onResponse(Bundle result) {
+                try {
+                    mGroupList = new JSONArray(result.getString("response"));
+                    if(getActivity() != null) {
+                        List<String > list2 = new ArrayList<String>();
+                        for(int i=0; i<mGroupList.length(); i++){
+                            try {
+                                JSONObject jsonObject = (JSONObject)mGroupList.get(i);
+                                list2.add(jsonObject.getString("name"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), R.layout.expandable_list_item, list2);
+                        mListPop2 = new ListPopupWindow(getActivity());
+                        mListPop2.setAdapter(adapter);
+                        mListPop2.setWidth(Utils.measureContentWidth(getContext(), adapter));
+                        mListPop2.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+                        mListPop2.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(getActivity(), android.R.color.white)));
+                        mListPop2.setAnchorView(mDropMenu2);
+                        mListPop2.setModal(true);
+                        mListPop2.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                mTv2.setText((String)parent.getAdapter().getItem(position));
+                                mSelectedGroup = position;
+                                mListPop2.dismiss();
+                            }
+                        });
+
+                        mListPop2.setOnDismissListener(new PopupWindow.OnDismissListener(){
+                            @Override
+                            public void onDismiss() {
+                                mDreoDownIndicator2.animate()
+                                        .setDuration(Utils.ROTATION_ANIM_DURATION)
+                                        .rotationBy(180)
+                                        .start();
+                            }
+                        });
+
+
+                        mDropMenu2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                mDreoDownIndicator2.animate()
+                                        .setDuration(Utils.ROTATION_ANIM_DURATION)
+                                        .rotationBy(180)
+                                        .start();
+                                mListPop2.show();
+                            }
+                        });
+                        if(adapter.isEmpty()){
+                            mTv2.setText(" ");
+                            mSelectedGroup = -1;
+                        }else {
+                            mTv2.setText((String) adapter.getItem(0));
+                            mSelectedGroup = 0;
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+        httpClient.async_query_GET(RestApi.getGroupListByStage(stageSn), null, callback);
+    }
+
+
+    private void getDataList(String stageSn, String groupSn, int returnCount){
+        String type = mTv3.getText().toString();
+        HttpClient httpClient = new HttpClient();
+        HttpClient.HttpResponseCallback callback = new HttpClient.HttpResponseCallback() {
+            @Override
+            public void onResponse(Bundle result) {
+                try {
+                    mData = new JSONArray(result.getString("response"));
+                    if(getActivity() != null) {
+
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        if(type != null && type.equals(getResources().getString(R.string.group))){
+            httpClient.async_query_GET(RestApi.getTeamAverageListByStageAndGroup(stageSn, groupSn, EVENT_NAME, returnCount), null, callback);
+        }else if(type != null && type.equals(getResources().getString(R.string.personal))){
+            httpClient.async_query_GET(RestApi.getRosterAverageListByStageAndGroup(stageSn, groupSn, EVENT_NAME, returnCount), null, callback);
+        }
+
     }
 }
