@@ -42,6 +42,6 @@ public class RestApi {
     }
 
     public static String getTeamAverageListByStageAndGroup(String stageSn, String groupSn, String eventName, int returnCount){
-        return BASE_URI + "/rest/roster/averagelistbystageandgroup/" + stageSn + "/" + groupSn +  "/" + eventName + "/" + returnCount +"?key=AIzaSyC_oI-W4XFOxqYu33e3Yg773ZAjt-NY5rk";
+        return BASE_URI + "/rest/team/averagelistbystageandgroup/" + stageSn + "/" + groupSn +  "/" + eventName + "/" + returnCount +"?key=AIzaSyC_oI-W4XFOxqYu33e3Yg773ZAjt-NY5rk";
     }
 }

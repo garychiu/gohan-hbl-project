@@ -21,6 +21,8 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 
+import com.asana.hbl.R;
+
 /**
  * Created by Gary on 2018/10/4.
  */
@@ -43,7 +45,8 @@ public class CircularImageView extends com.android.volley.toolbox.NetworkImageVi
     private boolean mInitialized;
     private boolean mPressed;
     private boolean mHighlightEnable;
-
+    private float mOffsetX= 0;
+    private float mOffsetY= 0;
     public CircularImageView(Context context) {
         super(context);
     }
@@ -56,14 +59,15 @@ public class CircularImageView extends com.android.volley.toolbox.NetworkImageVi
         int highlightColor = DEF_PRESS_HIGHLIGHT_COLOR;
 
         if (attrs != null) {
-            //TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView, 0, 0);
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircleImageView, 0, 0);
 
             //strokeColor = a.getColor(R.styleable.CircleImageView_strokeColor, Color.TRANSPARENT);
             //strokeWidth = a.getDimensionPixelSize(R.styleable.CircleImageView_strokeWidth, 0);
             //highlightEnable = a.getBoolean(R.styleable.CircleImageView_highlightEnable, true);
             //highlightColor = a.getColor(R.styleable.CircleImageView_highlightColor, DEF_PRESS_HIGHLIGHT_COLOR);
-
-            //a.recycle();
+            mOffsetX= a.getFloat(R.styleable.CircleImageView_offsetX, 0);
+            mOffsetY= a.getFloat(R.styleable.CircleImageView_offsetY, 0);;
+            a.recycle();
         }
 
         mShaderMatrix = new Matrix();
@@ -251,11 +255,11 @@ public class CircularImageView extends com.android.volley.toolbox.NetworkImageVi
         if (mBitmap.getWidth() < mBitmap.getHeight()) {
             scale = mBitmapDrawBounds.width() / (float)mBitmap.getWidth();
             dx = mBitmapDrawBounds.left;
-            dy = mBitmapDrawBounds.top - (mBitmap.getHeight() * scale / 2f) + (mBitmapDrawBounds.width() / 2f);
+            dy = mBitmapDrawBounds.top - (mBitmap.getHeight() * scale / 2f) + (mBitmapDrawBounds.width() / 2f) + mOffsetY;
         } else {
             scale = mBitmapDrawBounds.height() / (float)mBitmap.getHeight();
             dx = mBitmapDrawBounds.left - (mBitmap.getWidth() * scale / 2f) + (mBitmapDrawBounds.width() / 2f);
-            dy = mBitmapDrawBounds.top;
+            dy = mBitmapDrawBounds.top + mOffsetY;
         }
         mShaderMatrix.setScale(scale, scale);
         mShaderMatrix.postTranslate(dx, dy);

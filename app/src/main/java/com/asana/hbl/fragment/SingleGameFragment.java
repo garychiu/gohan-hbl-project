@@ -39,6 +39,7 @@ public class SingleGameFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        Log.v(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_single_game, container, false);
         return view;
     }

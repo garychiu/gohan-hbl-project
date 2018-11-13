@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ import java.util.List;
 
 public class SingleGameDataFregment extends Fragment {
     public static final String EXTRA_TEXT = "arg";
-    public static final String TAG = "HBL-SingleGameDataFregment";
+    public static final String TAG = "HBL-SingleGameDataFreg";
     private RelativeLayout mTeamSpinner;
     private List<String > mList = new ArrayList<String>();
     private TextView mTitle;
@@ -69,6 +70,7 @@ public class SingleGameDataFregment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        Log.v(TAG, "onCreateView");
         Bundle bundle = getArguments();
         if (bundle != null) {
             try {

@@ -58,6 +58,7 @@ public class DashboardFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        Log.v(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
         mDropMenu1 = (RelativeLayout)view.findViewById(R.id.drop_menu1);
         mDropMenu2 = (RelativeLayout)view.findViewById(R.id.drop_menu2);
@@ -319,7 +320,7 @@ public class DashboardFragment extends Fragment {
         });
         mTv2.setText(list.get(0));
         getGroupListByStage(map.get(mTv2.getText().toString()));
-        //getDataList(map.get(mTv2.getText().toString()));
+        getDataList(map.get(mTv2.getText().toString()));
     }
 
     private void getGroupListByStage(String stageSn){
@@ -330,6 +331,7 @@ public class DashboardFragment extends Fragment {
                 try {
                     mGroupList = new JSONArray(result.getString("response"));
                     if(getActivity() != null) {
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

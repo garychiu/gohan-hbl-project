@@ -36,6 +36,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Vector;
 
@@ -45,9 +47,10 @@ import java.util.Vector;
 
 public class AnalysisFragment extends Fragment {
     public static final String TAG = "HBL-AnalysisFragment";
-    private  final String EVENT_NAME = "point";
+    private  final String EVENT_NAME = "points";
     private ListPopupWindow mListPop, mListPop2, mListPop3;
     TextView mTv1, mTv2, mTv3;
+    TextView mItemTitle1, mItemTitle2, mItemTitle3, mItemTitle4, mItemTitle5;
     JSONArray mStageList, mGroupList;
     JSONArray mData;
     int mSelectedStage, mSelectedGroup;
@@ -55,6 +58,35 @@ public class AnalysisFragment extends Fragment {
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private ImageView mDreoDownIndicator, mDreoDownIndicator2, mDreoDownIndicator3;
+
+    LinkedHashMap<String, String> mGroupItenmList = new LinkedHashMap<String, String>(){
+        {
+            put("進攻得分", "PPG");
+            put("防守失分", "OPPG");
+            put("兩分球", "2P%");
+            put("三分球", "3P%");
+            put("罰球", "FT%");
+            put("進攻籃板", "OREB");
+            put("防守籃板", "DREB");
+            put("總籃板", "REB");
+            put("助攻", "AST");
+            put("阻攻", "BLK");
+            put("抄截", "STL");
+            put("失誤", "TOV");
+            put("犯規", "PF");
+        }
+    };
+
+    LinkedHashMap<String, String> mRosterItenmList = new LinkedHashMap<String, String>(){
+        {
+            put("場均得分", "PPG");
+            put("場均籃板", "RPG");
+            put("場均助攻", "APG");
+            put("場均抄截", "SPG");
+            put("場均阻攻", "BPG");
+        }
+    };
+
     public static AnalysisFragment newInsTance(){
         AnalysisFragment fragment = new AnalysisFragment();
         return fragment;
@@ -62,15 +94,21 @@ public class AnalysisFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        Log.v(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_analysis, container, false);
-        initDropMenu(view);
-        initTabLayout(view);
-        initViewPager(view);
-
+        initView(view);
         return view;
     }
 
-    private void initDropMenu(View view){
+    private void initView(View view){
+        mTabLayout = (TabLayout) view.findViewById(R.id.simpleTabLayout);
+        mViewPager = (ViewPager)view.findViewById(R.id.view_pager);
+        mItemTitle1 = (TextView)view.findViewById(R.id.item_title1);
+        mItemTitle2 = (TextView)view.findViewById(R.id.item_title2);
+        mItemTitle3 = (TextView)view.findViewById(R.id.item_title3);
+        mItemTitle4 = (TextView)view.findViewById(R.id.item_title4);
+        mItemTitle5  = (TextView)view.findViewById(R.id.item_title5);
+
         //DropMenu1
         mDropMenu = (RelativeLayout)view.findViewById(R.id.drop_menu);
         mDreoDownIndicator = (ImageView) view.findViewById(R.id.iv1);
@@ -82,13 +120,17 @@ public class AnalysisFragment extends Fragment {
         mDreoDownIndicator2 = (ImageView) view.findViewById(R.id.iv2);
         mTv2 = (TextView)view.findViewById(R.id.tv2);
 
-        getStageList();
-
         //DropMenu3
         mDropMenu3 = (RelativeLayout)view.findViewById(R.id.drop_menu3);
         mDreoDownIndicator3 = (ImageView) view.findViewById(R.id.iv3);
         mTv3 = (TextView)view.findViewById(R.id.tv3);
 
+        initDropMenu();
+        initTabLayout();
+    }
+
+    private void initDropMenu(){
+        getStageList();
         List<String > list3 = new ArrayList<String>();
         list3.add(getResources().getString(R.string.group));
         list3.add(getResources().getString(R.string.personal));
@@ -104,6 +146,9 @@ public class AnalysisFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mTv3.setText((String)parent.getAdapter().getItem(position));
+                getDataList(mSelectedStage, mSelectedGroup, 10);
+                initTabLayout();
+
                 mListPop3.dismiss();
             }
         });
@@ -130,32 +175,43 @@ public class AnalysisFragment extends Fragment {
             }
         });
         mTv3.setText((String)adapter3.getItem(0));
-
     }
 
-    private void initTabLayout(View view){
-        mTabLayout = (TabLayout) view.findViewById(R.id.simpleTabLayout);
+    private void initTabLayout(){
+        mTabLayout.removeAllTabs();
+        String type = mTv3.getText().toString();
         mTabLayout.setTabTextColors(Color.parseColor("#999999"),
                 Color.parseColor("#A8272C"));
-        TabLayout.Tab tab1 = mTabLayout.newTab();
-        tab1.setText(getResources().getString(R.string.offensive_score));
-        mTabLayout.addTab(tab1);
+        List<String> list = new ArrayList<String>();
 
-        TabLayout.Tab tab2 = mTabLayout.newTab();
-        tab2.setText(getResources().getString(R.string.defensive_score));
-        mTabLayout.addTab(tab2);
-
-        TabLayout.Tab tab3 = mTabLayout.newTab();
-        tab3.setText(getResources().getString(R.string.two_pointer));
-        mTabLayout.addTab(tab3);
-
-        TabLayout.Tab tab4 = mTabLayout.newTab();
-        tab4.setText(getResources().getString(R.string.three_pointer));
-        mTabLayout.addTab(tab4);
+        if(isRoster()){
+            for ( String key : mRosterItenmList.keySet() ) {
+                list.add(key);
+            }
+            mItemTitle1.setText("姓名");
+            mItemTitle2.setVisibility(View.VISIBLE);
+            mItemTitle2.setText("隊伍");
+        }else{
+            for ( String key : mGroupItenmList.keySet() ) {
+                list.add(key);
+            }
+            mItemTitle1.setText("隊伍");
+            mItemTitle2.setVisibility(View.GONE);
+        }
+        for(String item : list){
+            TabLayout.Tab tab = mTabLayout.newTab();
+            tab.setText(item);
+            mTabLayout.addTab(tab);
+        }
         mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 mViewPager.setCurrentItem(tab.getPosition());
+                if(isRoster()){
+                    mItemTitle4.setText(mRosterItenmList.get(tab.getText().toString()));
+                }else{
+                    mItemTitle4.setText(mGroupItenmList.get(tab.getText().toString()));
+                }
             }
 
             @Override
@@ -168,29 +224,28 @@ public class AnalysisFragment extends Fragment {
 
             }
         });
+
+        initViewPager();
     }
 
-    private void initViewPager(View view){
-        mViewPager = (ViewPager)view.findViewById(R.id.view_pager);
-        ListView listview1 = new ListView(getContext());
-        ListView listview2 = new ListView(getContext());
-        ListView listview3 = new ListView(getContext());
-        ListView listview4 = new ListView(getContext());
-
+    private void initViewPager(){
         Vector<View> pages = new Vector<View>();
-
-        pages.add(listview1);
-        pages.add(listview2);
-        pages.add(listview3);
-        pages.add(listview4);
+        if(isRoster()){
+            for ( String key : mRosterItenmList.keySet() ) {
+                ListView listview = new ListView(getContext());
+                listview.setAdapter(new CusomListAdapter(getContext(), null, mRosterItenmList.get(key)));
+                pages.add(listview);
+            }
+        }else{
+            for ( String key : mGroupItenmList.keySet() ) {
+                ListView listview = new ListView(getContext());
+                listview.setAdapter(new CusomListAdapter(getContext(), null, mGroupItenmList.get(key)));
+                pages.add(listview);
+            }
+        }
 
         CustomPagerAdapter adapter = new CustomPagerAdapter(getContext(), pages);
         mViewPager.setAdapter(adapter);
-
-        listview1.setAdapter(new CusomListAdapter(getContext(), null));
-        listview2.setAdapter(new CusomListAdapter(getContext(), null));
-        listview3.setAdapter(new CusomListAdapter(getContext(), null));
-        listview4.setAdapter(new CusomListAdapter(getContext(), null));
         mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
     }
 
@@ -231,24 +286,65 @@ public class AnalysisFragment extends Fragment {
     public class CusomListAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
         private List<JSONObject> mListData= new ArrayList<JSONObject>();
+        private String mDataID;
+
+
+        private final LinkedHashMap<String, String> mGroupDataMap = new LinkedHashMap<String, String>(){
+            {
+                put("PPG", "points");
+                put("OPPG", "points");
+                put("2P%", "two_pct");
+                put("3P%", "trey_pct");
+                put("FT%", "ft_pct");
+                put("OREB", "reb_o");
+                put("DREB", "reb_d");
+                put("REB", "reb");
+                put("AST", "ast");
+                put("BLK", "blk");
+                put("STL", "stl");
+                put("TOV", "turnover");
+                put("PF", "pfoul");
+            }
+        };
+
+        LinkedHashMap<String, String> mRosterDataMap = new LinkedHashMap<String, String>(){
+            {
+                put("PPG", "points");
+                put("RPG", "reb");
+                put("APG", "ast");
+                put("SPG", "stl");
+                put( "BPG", "blk");
+            }
+        };
+
+
         private class ViewHolder {
-            TextView tv_team_name,tv2, tv3, tv4;
+            TextView tv_team_name,tv2, tv3, tv4, tv5;
             CircularImageView iv_team;
-            public ViewHolder(TextView txt1, TextView txt2, TextView txt3, TextView txt4, CircularImageView iv){
+            public ViewHolder(TextView txt1, TextView txt2, TextView txt3, TextView txt4, TextView txt5, CircularImageView iv){
                 this.tv_team_name = txt1;
                 this.tv2 = txt2;
                 this.tv3 = txt3;
                 this.tv4 = txt4;
+                this.tv5 = txt5;
                 this.iv_team = iv;
             }
         }
 
-        public CusomListAdapter(Context context, JSONArray data){
-            //initDataList(data);
+        public CusomListAdapter(Context context, JSONArray data, String dataID){
+            this.mDataID = dataID;
+            initDataList(data);
             mInflater = LayoutInflater.from(context);
         }
 
+        public void updateDataList(JSONArray data){
+            initDataList(data);
+            notifyDataSetChanged();
+        }
+
         private void initDataList(JSONArray data){
+            if(data == null) return;
+            mListData.clear();
             for(int i=0; i<data.length(); i++){
                 try {
                     JSONObject jsonObject = (JSONObject)data.get(i);
@@ -261,14 +357,12 @@ public class AnalysisFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return 10;
-            //return mListData.size();
+            return mListData.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return null;
-            //return mListData.get(position);
+            return mListData.get(position);
         }
 
         @Override
@@ -286,43 +380,70 @@ public class AnalysisFragment extends Fragment {
                         (TextView) convertView.findViewById(R.id.tv2),
                         (TextView) convertView.findViewById(R.id.tv3),
                         (TextView) convertView.findViewById(R.id.tv4),
+                        (TextView) convertView.findViewById(R.id.tv5),
                         (CircularImageView) convertView.findViewById(R.id.iv)
                 );
                 convertView.setTag(holder);
             }else{
                 holder = (ViewHolder) convertView.getTag();
             }
-            HBLImageLoader.loadTeamImage(getActivity().getApplicationContext(), "", holder.iv_team);
-            /*
-            try {
-                holder.tv_team_name.setText(mListData.get(position).getString("team_name"));
-            } catch (JSONException e) {
-                e.printStackTrace();
+
+            if(isRoster()){
+                HBLImageLoader.loadPlayerImage(getActivity().getApplicationContext(), "", holder.iv_team);
+
+                try {
+                    holder.tv_team_name.setText(mListData.get(position).getString("name_alt"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                holder.tv2.setVisibility(View.VISIBLE);
+                try {
+                    holder.tv2.setText(mListData.get(position).getString("team_name_alt"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }else{
+                HBLImageLoader.loadTeamImage(getActivity().getApplicationContext(), "", holder.iv_team);
+
+                try {
+                    holder.tv_team_name.setText(mListData.get(position).getString("team_name_alt"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                holder.tv2.setVisibility(View.GONE);
+
+
+
             }
+
+
+
             try {
-                holder.tv_win.setText(mListData.get(position).getString("win_count"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            try {
-                holder.tv_lose.setText(mListData.get(position).getString("loss_count"));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            try {
-                holder.tv_raking.setText(mListData.get(position).getString("rank"));
+                holder.tv3.setText(mListData.get(position).getString("gp"));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
             try {
-                mImageLoader.get(mListData.get(position).getString("logo"), ImageLoader.getImageListener(holder.iv_team,
-                        R.mipmap.team_default, R.mipmap.team_default));
-                holder.iv_team.setImageUrl(mListData.get(position).getString("logo"), mImageLoader);
+                if(isRoster()) {
+                    Log.v("Gary", "mDataID: " + mDataID);
+                    Log.v("Gary", "mRosterDataMap.get(mDataID): " + mRosterDataMap.get(mDataID));
+                    holder.tv4.setText(mListData.get(position).getString((mRosterDataMap.get(mDataID))));
+                }else{
+                    Log.v("Gary", "mDataID: " + mDataID);
+                    Log.v("Gary", "mRosterDataMap.get(mDataID): " + mGroupDataMap.get(mDataID));
+                    holder.tv4.setText(mListData.get(position).getString((mGroupDataMap.get(mDataID))));
+                }
             } catch (JSONException e) {
+                Log.v("Gary", "e: " + e);
                 e.printStackTrace();
             }
-           */
+            holder.tv5.setText("" + (position + 1));
+
             return convertView;
         }
     }
@@ -357,12 +478,9 @@ public class AnalysisFragment extends Fragment {
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 mTv1.setText((String)parent.getAdapter().getItem(position));
                                 mSelectedStage = position;
-                                String selectedGender;
                                 try {
                                     JSONObject jsonObject = (JSONObject)mStageList.get(position);
                                     getGroupListByStage(jsonObject.getString("sn"));
-                                    selectedGender = jsonObject.getString("gender");
-                                    Log.v("Gary", "selectedSN: " + jsonObject.getString("sn"));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -435,6 +553,7 @@ public class AnalysisFragment extends Fragment {
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                                 mTv2.setText((String)parent.getAdapter().getItem(position));
                                 mSelectedGroup = position;
+                                getDataList(mSelectedStage, mSelectedGroup, 10);
                                 mListPop2.dismiss();
                             }
                         });
@@ -460,6 +579,7 @@ public class AnalysisFragment extends Fragment {
                                 mListPop2.show();
                             }
                         });
+
                         if(adapter.isEmpty()){
                             mTv2.setText(" ");
                             mSelectedGroup = -1;
@@ -467,6 +587,8 @@ public class AnalysisFragment extends Fragment {
                             mTv2.setText((String) adapter.getItem(0));
                             mSelectedGroup = 0;
                         }
+                        getDataList(mSelectedStage, mSelectedGroup, 10);
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -478,8 +600,31 @@ public class AnalysisFragment extends Fragment {
     }
 
 
-    private void getDataList(String stageSn, String groupSn, int returnCount){
-        String type = mTv3.getText().toString();
+    private void getDataList(int selectedStage, int seletedGroup, int returnCount){
+        if(selectedStage < 0 || seletedGroup < 0 || mStageList == null || mGroupList == null){
+            return;
+        }
+
+        String stageSn = null;
+        String groupSn = null;
+
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = (JSONObject)mStageList.get(selectedStage);
+            stageSn = jsonObject.getString("sn");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            jsonObject = (JSONObject)mGroupList.get(seletedGroup);
+            groupSn = jsonObject.getString("sn");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if(stageSn == null || groupSn == null) return;
+
         HttpClient httpClient = new HttpClient();
         HttpClient.HttpResponseCallback callback = new HttpClient.HttpResponseCallback() {
             @Override
@@ -487,7 +632,11 @@ public class AnalysisFragment extends Fragment {
                 try {
                     mData = new JSONArray(result.getString("response"));
                     if(getActivity() != null) {
-
+                        Vector<View> pages = ((CustomPagerAdapter)mViewPager.getAdapter()).pages;
+                        for(View view : pages){
+                            CusomListAdapter adapter = (CusomListAdapter)((ListView)view).getAdapter();
+                            adapter.updateDataList(mData);
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -495,11 +644,24 @@ public class AnalysisFragment extends Fragment {
             }
         };
 
-        if(type != null && type.equals(getResources().getString(R.string.group))){
-            httpClient.async_query_GET(RestApi.getTeamAverageListByStageAndGroup(stageSn, groupSn, EVENT_NAME, returnCount), null, callback);
-        }else if(type != null && type.equals(getResources().getString(R.string.personal))){
+        if(isRoster()){
+            Log.v("Gary", "get Roster URI: " + RestApi.getRosterAverageListByStageAndGroup(stageSn, groupSn, EVENT_NAME, returnCount));
             httpClient.async_query_GET(RestApi.getRosterAverageListByStageAndGroup(stageSn, groupSn, EVENT_NAME, returnCount), null, callback);
+        }else{
+            Log.v("Gary", "get Team URI: " + RestApi.getTeamAverageListByStageAndGroup(stageSn, groupSn, EVENT_NAME, returnCount));
+            httpClient.async_query_GET(RestApi.getTeamAverageListByStageAndGroup(stageSn, groupSn, EVENT_NAME, returnCount), null, callback);
         }
 
+    }
+
+    private boolean isRoster(){
+        boolean result = true;
+        String type = mTv3.getText().toString();
+        if(type != null && type.equals(getResources().getString(R.string.group))){
+            result = false;
+        }else if(type != null && type.equals(getResources().getString(R.string.personal))){
+            result = true;
+        }
+        return result;
     }
 }

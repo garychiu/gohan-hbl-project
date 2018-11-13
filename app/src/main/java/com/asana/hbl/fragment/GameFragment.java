@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,7 @@ public class GameFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        Log.v(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_game, container, false);
         mGamesSpinner = (RelativeLayout)view.findViewById(R.id.spinner_games);
         mTitle = (TextView)view.findViewById(R.id.titles);

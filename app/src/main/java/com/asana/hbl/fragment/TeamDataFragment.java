@@ -44,6 +44,7 @@ public class TeamDataFragment extends Fragment {
     }
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        Log.v(TAG, "onCreateView");
         View view = inflater.inflate(R.layout.fragment_team_data, container, false);
         mExpListView = (ExpandableListView)view.findViewById(R.id.lvExp);
         return view;
