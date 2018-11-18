@@ -16,18 +16,35 @@
             android:layout_width="24.615pt"
             android:layout_height="24.615pt"
             />
-        <TextView
-            android:id="@+id/tv1"
-            android:layout_toRightOf="@+id/iv"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="3.465pt"
-            android:layout_marginTop="4.635pt"
-            android:layout_marginBottom="5.265pt"
-            android:textSize="5.535pt"
-            android:text="Team Name"
-            android:textColor="#53586A"
-            />
+            android:layout_toRightOf="@+id/iv"
+            >
+            <TextView
+                android:id="@+id/tv1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3.465pt"
+                android:layout_marginTop="4.635pt"
+                android:layout_marginBottom="5.265pt"
+                android:textSize="5.535pt"
+                android:text="Team Name"
+                android:textColor="#53586A"
+                />
+            <TextView
+                android:id="@+id/tv1_1"
+                android:layout_below="@+id/tv1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3.465pt"
+                android:textSize="5.535pt"
+                android:text="Team Name"
+                android:textColor="#53586A"
+                android:singleLine="true"
+                android:ellipsize="end"
+                />
+        </RelativeLayout>
     </RelativeLayout>
     <TextView
         android:id="@+id/tv2"
@@ -40,6 +57,8 @@
         android:text="12"
         android:textSize="8.235pt"
         android:textColor="#040404"
+        android:singleLine="true"
+        android:ellipsize="end"
         />
     <TextView
         android:id="@+id/tv3"
@@ -49,9 +68,11 @@
         android:layout_marginTop="14.265pt"
         android:layout_marginBottom="15.615pt"
         android:gravity="center"
-        android:text="12"
+        android:text="MPG"
         android:textSize="8.235pt"
         android:textColor="#040404"
+        android:singleLine="true"
+        android:ellipsize="end"
         />
     <TextView
         android:id="@+id/tv4"
@@ -64,6 +85,8 @@
         android:text="1"
         android:textSize="8.235pt"
         android:textColor="#040404"
+        android:singleLine="true"
+        android:ellipsize="end"
         />
     <TextView
         android:id="@+id/tv5"
@@ -76,5 +99,7 @@
         android:text="1"
         android:textSize="8.235pt"
         android:textColor="#040404"
+        android:singleLine="true"
+        android:ellipsize="end"
         />
 </LinearLayout>

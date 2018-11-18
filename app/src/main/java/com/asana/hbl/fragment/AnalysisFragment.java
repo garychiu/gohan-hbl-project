@@ -1,4 +1,4 @@
-package com.asana.hbl.fragment;
+ï»¿package com.asana.hbl.fragment;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -61,29 +61,29 @@ public class AnalysisFragment extends Fragment {
 
     LinkedHashMap<String, String> mGroupItenmList = new LinkedHashMap<String, String>(){
         {
-            put("¶i§ğ±o¤À", "PPG");
-            put("¨¾¦u¥¢¤À", "OPPG");
-            put("¨â¤À²y", "2P%");
-            put("¤T¤À²y", "3P%");
-            put("»@²y", "FT%");
-            put("¶i§ğÄxªO", "OREB");
-            put("¨¾¦uÄxªO", "DREB");
-            put("Á`ÄxªO", "REB");
-            put("§U§ğ", "AST");
-            put("ªı§ğ", "BLK");
-            put("§ÛºI", "STL");
-            put("¥¢»~", "TOV");
-            put("¥Ç³W", "PF");
+            put("é€²æ”»å¾—åˆ†", "PPG");
+            put("é˜²å®ˆå¤±åˆ†", "OPPG");
+            put("å…©åˆ†çƒ", "2P%");
+            put("ä¸‰åˆ†çƒ", "3P%");
+            put("ç½°çƒ", "FT%");
+            put("é€²æ”»ç±ƒæ¿", "OREB");
+            put("é˜²å®ˆç±ƒæ¿", "DREB");
+            put("ç¸½ç±ƒæ¿", "REB");
+            put("åŠ©æ”»", "AST");
+            put("é˜»æ”»", "BLK");
+            put("æŠ„æˆª", "STL");
+            put("å¤±èª¤", "TOV");
+            put("çŠ¯è¦", "PF");
         }
     };
 
     LinkedHashMap<String, String> mRosterItenmList = new LinkedHashMap<String, String>(){
         {
-            put("³õ§¡±o¤À", "PPG");
-            put("³õ§¡ÄxªO", "RPG");
-            put("³õ§¡§U§ğ", "APG");
-            put("³õ§¡§ÛºI", "SPG");
-            put("³õ§¡ªı§ğ", "BPG");
+            put("å ´å‡å¾—åˆ†", "PPG");
+            put("å ´å‡ç±ƒæ¿", "RPG");
+            put("å ´å‡åŠ©æ”»", "APG");
+            put("å ´å‡æŠ„æˆª", "SPG");
+            put("å ´å‡é˜»æ”»", "BPG");
         }
     };
 
@@ -188,15 +188,12 @@ public class AnalysisFragment extends Fragment {
             for ( String key : mRosterItenmList.keySet() ) {
                 list.add(key);
             }
-            mItemTitle1.setText("©m¦W");
-            mItemTitle2.setVisibility(View.VISIBLE);
-            mItemTitle2.setText("¶¤¥î");
+            mItemTitle1.setText("å§“å");
         }else{
             for ( String key : mGroupItenmList.keySet() ) {
                 list.add(key);
             }
-            mItemTitle1.setText("¶¤¥î");
-            mItemTitle2.setVisibility(View.GONE);
+            mItemTitle1.setText("éšŠä¼");
         }
         for(String item : list){
             TabLayout.Tab tab = mTabLayout.newTab();
@@ -319,10 +316,11 @@ public class AnalysisFragment extends Fragment {
 
 
         private class ViewHolder {
-            TextView tv_team_name,tv2, tv3, tv4, tv5;
+            TextView tv_11, tv_team_name,tv2, tv3, tv4, tv5;
             CircularImageView iv_team;
-            public ViewHolder(TextView txt1, TextView txt2, TextView txt3, TextView txt4, TextView txt5, CircularImageView iv){
+            public ViewHolder(TextView txt1, TextView txt1_1, TextView txt2, TextView txt3, TextView txt4, TextView txt5, CircularImageView iv){
                 this.tv_team_name = txt1;
+                this.tv_11 = txt1_1;
                 this.tv2 = txt2;
                 this.tv3 = txt3;
                 this.tv4 = txt4;
@@ -377,6 +375,7 @@ public class AnalysisFragment extends Fragment {
                 convertView = mInflater.inflate(R.layout.analysis_list_item, null);
                 holder = new ViewHolder(
                         (TextView) convertView.findViewById(R.id.tv1),
+                        (TextView) convertView.findViewById(R.id.tv1_1),
                         (TextView) convertView.findViewById(R.id.tv2),
                         (TextView) convertView.findViewById(R.id.tv3),
                         (TextView) convertView.findViewById(R.id.tv4),
@@ -397,14 +396,12 @@ public class AnalysisFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-                holder.tv2.setVisibility(View.VISIBLE);
+                holder.tv_11.setVisibility(View.VISIBLE);
                 try {
-                    holder.tv2.setText(mListData.get(position).getString("team_name_alt"));
+                    holder.tv_11.setText(mListData.get(position).getString("team_name_alt"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
-
             }else{
                 HBLImageLoader.loadTeamImage(getActivity().getApplicationContext(), "", holder.iv_team);
 
@@ -414,32 +411,50 @@ public class AnalysisFragment extends Fragment {
                     e.printStackTrace();
                 }
 
-                holder.tv2.setVisibility(View.GONE);
-
-
-
+                holder.tv_11.setVisibility(View.GONE);
             }
 
 
-
+            String gp;
             try {
-                holder.tv3.setText(mListData.get(position).getString("gp"));
+                gp = mListData.get(position).getString("gp");
+                holder.tv2.setText(gp);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                gp = null;
+            }
+            String second;
+            try {
+ 
+                second = mListData.get(position).getString("seconds");
+                float munite = (Float.valueOf(second)) % 60;
+                String MPG = String.valueOf(munite/Integer.valueOf(gp));
+                if(MPG.length() > 5){
+                    MPG = MPG.substring(0, 4 );
+                }
+                holder.tv3.setText(MPG);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
 
             try {
+                String texToShow = "";
                 if(isRoster()) {
-                    Log.v("Gary", "mDataID: " + mDataID);
-                    Log.v("Gary", "mRosterDataMap.get(mDataID): " + mRosterDataMap.get(mDataID));
-                    holder.tv4.setText(mListData.get(position).getString((mRosterDataMap.get(mDataID))));
+                    texToShow = mListData.get(position).getString((mRosterDataMap.get(mDataID)));
+                    if(texToShow.length() > 5){
+                        texToShow = texToShow.substring(0, 4);
+                    }
+                    holder.tv4.setText(texToShow);
+
                 }else{
-                    Log.v("Gary", "mDataID: " + mDataID);
-                    Log.v("Gary", "mRosterDataMap.get(mDataID): " + mGroupDataMap.get(mDataID));
-                    holder.tv4.setText(mListData.get(position).getString((mGroupDataMap.get(mDataID))));
+                    texToShow = mListData.get(position).getString((mGroupDataMap.get(mDataID)));
+                    if(texToShow.length() > 4){
+                        texToShow = texToShow.substring(0, 4);
+                    }
+                    holder.tv4.setText(texToShow);
+                    holder.tv4.setText(texToShow);
                 }
             } catch (JSONException e) {
-                Log.v("Gary", "e: " + e);
                 e.printStackTrace();
             }
             holder.tv5.setText("" + (position + 1));
