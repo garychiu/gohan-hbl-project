@@ -61,6 +61,6 @@
     <string name="rank">RANK</string>
 
     <string name="all_games">All Games</string>
-
+    <string name="no_games">No Game Data</string>
 
 </resources>

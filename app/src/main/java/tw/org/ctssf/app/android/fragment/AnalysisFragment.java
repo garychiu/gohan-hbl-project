@@ -231,13 +231,13 @@ public class AnalysisFragment extends Fragment {
         if(isRoster()){
             for ( String key : mRosterItenmList.keySet() ) {
                 ListView listview = new ListView(getContext());
-                listview.setAdapter(new CusomListAdapter(getContext(), null, mRosterItenmList.get(key)));
+                listview.setAdapter(new CusomListAdapter(getContext(), mData, mRosterItenmList.get(key)));
                 pages.add(listview);
             }
         }else{
             for ( String key : mGroupItenmList.keySet() ) {
                 ListView listview = new ListView(getContext());
-                listview.setAdapter(new CusomListAdapter(getContext(), null, mGroupItenmList.get(key)));
+                listview.setAdapter(new CusomListAdapter(getContext(), mData, mGroupItenmList.get(key)));
                 pages.add(listview);
             }
         }
@@ -662,10 +662,8 @@ public class AnalysisFragment extends Fragment {
         };
 
         if(isRoster()){
-            Log.v("Gary", "get Roster URI: " + RestApi.getRosterAverageListByStageAndGroup(stageSn, groupSn, EVENT_NAME, returnCount));
             httpClient.async_query_GET(RestApi.getRosterAverageListByStageAndGroup(stageSn, groupSn, EVENT_NAME, returnCount), null, callback);
         }else{
-            Log.v("Gary", "get Team URI: " + RestApi.getTeamAverageListByStageAndGroup(stageSn, groupSn, EVENT_NAME, returnCount));
             httpClient.async_query_GET(RestApi.getTeamAverageListByStageAndGroup(stageSn, groupSn, EVENT_NAME, returnCount), null, callback);
         }
 

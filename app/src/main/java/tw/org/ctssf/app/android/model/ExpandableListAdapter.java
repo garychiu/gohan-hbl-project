@@ -269,7 +269,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 float fPersontage = Float.parseFloat(((JSONObject) getGroup(groupPosition)).getString("two_m")) /
                         (Float.parseFloat(((JSONObject) getGroup(groupPosition)).getString("two_a")) + Float.parseFloat(((JSONObject) getGroup(groupPosition)).getString("two_m")));
                 fPersontage = fPersontage*100;
-                Log.v("Gary", "fPersontage: " + fPersontage);
+                //Log.v("Gary", "fPersontage: " + fPersontage);
                 String sPersontage = new DecimalFormat("#.##").format(fPersontage);
                 holder.txt62.setText(sPersontage);
             }else{

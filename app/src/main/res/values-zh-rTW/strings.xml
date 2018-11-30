@@ -35,4 +35,5 @@
     <string name="game_completed">已賽</string>
 
     <string name="all_games">所有賽事</string>
+    <string name="no_games">無任何賽事資料</string>
 </resources>

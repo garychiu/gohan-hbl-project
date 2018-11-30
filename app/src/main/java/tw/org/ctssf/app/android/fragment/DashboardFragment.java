@@ -181,7 +181,11 @@ public class DashboardFragment extends Fragment {
         private void initDataList(JSONArray data){
             JSONArray ja = data;
             int rank = 1;
+            int errorCount = 0;
             do{
+                if(errorCount >= ja.length()){
+                    break;
+                }
                 for(int i=0; i<ja.length(); i++){
                     try {
                         JSONObject jsonObject = (JSONObject)data.get(i);
@@ -190,7 +194,8 @@ public class DashboardFragment extends Fragment {
                             ja.remove(i);
                             rank ++;
                         }
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
+                        errorCount ++;
                         e.printStackTrace();
                     }
                 }
@@ -429,8 +434,10 @@ public class DashboardFragment extends Fragment {
                 mListPop2.show();
             }
         });
-        mTv2.setText(list.get(0));
-        getGroupListByStage(map.get(list.get(0)));
+        if(list.size() > 0) {
+            mTv2.setText(list.get(0));
+            getGroupListByStage(map.get(list.get(0)));
+        }
         //getDataList(map.get(mTv2.getText().toString()));
     }
     /*
