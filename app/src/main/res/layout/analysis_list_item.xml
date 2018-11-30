@@ -11,7 +11,7 @@
         android:layout_marginTop="7.965pt"
         android:layout_marginBottom="6.435pt"
         android:layout_height="wrap_content">
-        <com.asana.hbl.views.CircularImageView
+        <tw.org.ctssf.app.android.views.CircularImageView
             android:id="@+id/iv"
             android:layout_width="24.615pt"
             android:layout_height="24.615pt"

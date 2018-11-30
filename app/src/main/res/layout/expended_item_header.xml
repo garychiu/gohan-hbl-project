@@ -16,7 +16,7 @@
                 android:layout_marginLeft="5.715pt"
                 android:background="#F4F4F4"
                 >
-                <com.asana.hbl.views.CircularImageView
+                <tw.org.ctssf.app.android.views.CircularImageView
                     android:id="@+id/image_player"
                     android:layout_width="24.615pt"
                     android:layout_height="24.615pt"

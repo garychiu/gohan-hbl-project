@@ -4,7 +4,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "com.asana.hbl"
+        applicationId "tw.org.ctssf.app.android"
         minSdkVersion 23
         targetSdkVersion 26
         versionCode 1

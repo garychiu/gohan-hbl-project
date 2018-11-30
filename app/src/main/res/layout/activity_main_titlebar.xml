@@ -15,7 +15,6 @@
         android:id="@+id/app_logo"
         android:layout_width="28.215pt"
         android:layout_height="9.585pt"
-        android:layout_marginBottom="6.3pt"
         android:layout_marginLeft="6.3pt"
         android:layout_marginTop="14.715pt"
         android:background="@mipmap/hbl_logo" />

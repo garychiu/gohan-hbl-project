@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,8 +11,9 @@
         android:layout_marginLeft="10.96125pt"
         android:layout_marginRight="10.96125pt"
         >
-        <com.asana.hbl.views.CircularImageView
+        <tw.org.ctssf.app.android.views.CircularImageView
             android:id="@+id/iv1"
+            app:offsetY="30"
             android:layout_width="24.615pt"
             android:layout_height="24.615pt"
             android:layout_marginTop="6.885pt"
@@ -30,7 +32,7 @@
         <TextView
             android:id="@+id/tv12"
             android:layout_toRightOf="@+id/tv11"
-            android:layout_width="14.715pt"
+            android:layout_width="wrap_content"
             android:layout_height="8.235pt"
             android:layout_marginLeft="33.615pt"
             android:layout_marginTop="16.335pt"
@@ -47,8 +49,9 @@
             android:layout_marginBottom="12.735pt"
             android:text="13"
             android:textColor="#F64E4E"/>
-        <com.asana.hbl.views.CircularImageView
+        <tw.org.ctssf.app.android.views.CircularImageView
             android:id="@+id/iv2"
+            app:offsetY="30"
             android:layout_toRightOf="@+id/tv13"
             android:layout_width="24.615pt"
             android:layout_height="24.615pt"
@@ -66,7 +69,7 @@
         <TextView
             android:id="@+id/tv21"
             android:layout_width="21.95pt"
-            android:layout_height="6.885pt"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="1.035pt"
             android:text="21"
             android:textColor="@android:color/black"/>
@@ -95,7 +98,7 @@
             android:id="@+id/tv22"
             android:layout_toRightOf="@+id/score_bar"
             android:layout_width="21.95pt"
-            android:layout_height="6.885pt"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="2.115pt"
             android:layout_marginLeft="15.165pt"
             android:text="22"

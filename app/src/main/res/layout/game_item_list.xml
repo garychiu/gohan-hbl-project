@@ -8,16 +8,16 @@
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="57.285pt"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="10.35pt">
-    <TextView
-        android:id="@+id/tv1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="6.75pt"
-        android:textColor="@color/colorCustomTabTextSelected"
-        android:gravity="center"
-       />
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textColor="@color/colorCustomTabTextSelected"
+            android:textSize="6.75pt" />
     <TextView
         android:id="@+id/tv2"
         android:layout_width="match_parent"
@@ -27,7 +27,7 @@
         android:gravity="center"
         />
     </LinearLayout>
-    <com.asana.hbl.views.CircularImageView
+    <tw.org.ctssf.app.android.views.CircularImageView
         android:id="@+id/image_home"
         android:layout_width="26.55pt"
         android:layout_height="26.55pt"
@@ -37,7 +37,7 @@
         />
     <TextView
         android:id="@+id/tv_home"
-        android:layout_width="12.285pt"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="41.4pt"
         android:layout_marginTop="42.75pt"
@@ -46,11 +46,21 @@
         android:textColor="#321A32"
         android:gravity="center"
         />
+    <TextView
+        android:id="@+id/tv_home_name"
+        android:layout_width="50.22pt"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="52.5pt"
+        android:textSize="5.4pt"
+        android:textColor="#321A32"
+        android:gravity="center"
+        />
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="16.335pt"
         android:layout_height="15.3pt"
-        android:layout_marginLeft="83.385pt"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="38.25pt"
         android:layout_marginBottom="8.865pt"
         >
@@ -77,7 +87,7 @@
     </LinearLayout>
     <TextView
         android:id="@+id/tv_guest"
-        android:layout_width="12.285pt"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="129.735pt"
         android:layout_marginTop="42.3pt"
@@ -86,12 +96,22 @@
         android:textColor="#321A32"
         android:gravity="center"
         />
-    <com.asana.hbl.views.CircularImageView
+    <tw.org.ctssf.app.android.views.CircularImageView
         android:id="@+id/image_guest"
         android:layout_width="26.55pt"
         android:layout_height="26.55pt"
         android:layout_marginLeft="145.215pt"
         android:layout_marginTop="24.615pt"
         android:layout_marginBottom="11.25pt"
+        />
+    <TextView
+        android:id="@+id/tv_guest_name"
+        android:layout_width="50.22pt"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="133.38pt"
+        android:layout_marginTop="52.5pt"
+        android:textSize="5.4pt"
+        android:textColor="#321A32"
+        android:gravity="center"
         />
 </RelativeLayout>

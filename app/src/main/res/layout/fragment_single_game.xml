@@ -101,7 +101,7 @@
         android:layout_height="14.985pt"
         android:layout_marginTop="5.535pt"
         android:layout_marginLeft="11.115pt">
-        <com.asana.hbl.views.CircularImageView
+        <tw.org.ctssf.app.android.views.CircularImageView
             android:layout_width="15.165pt"
             android:layout_height="14.985pt"
             android:id="@+id/iv21"
@@ -188,7 +188,7 @@
         android:layout_marginTop="5.535pt"
         android:layout_marginLeft="11.115pt"
         android:layout_marginBottom="8.865pt">
-        <com.asana.hbl.views.CircularImageView
+        <tw.org.ctssf.app.android.views.CircularImageView
             android:layout_width="15.165pt"
             android:layout_height="14.985pt"
             android:id="@+id/iv31"
@@ -268,41 +268,47 @@
                 />
         </LinearLayout>
     </RelativeLayout>
-
-
-    <LinearLayout
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="0.315pt"
+        android:layout_height="0.315pt"
         android:background="#E5DDE5"
         android:orientation="horizontal">
+    </View>
+    <!--
+    <LinearLayout
+        tw.org.ctssf.app.android:layout_width="match_parent"
+        tw.org.ctssf.app.android:layout_height="wrap_content"
+        tw.org.ctssf.app.android:layout_margin="0.315pt"
+        tw.org.ctssf.app.android:background="#E5DDE5"
+        tw.org.ctssf.app.android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/team_home"
-            android:layout_width="match_parent"
-            android:layout_height="24.795pt"
-            android:layout_margin="0.315pt"
-            android:layout_weight="1"
-            android:background="@android:color/white"
-            android:gravity="center"
-            android:text="Team Home"
-            android:textColor="#8C4141"
-            android:textSize="4.95pt"
-            android:textStyle="bold" />
+            tw.org.ctssf.app.android:id="@+id/team_home"
+            tw.org.ctssf.app.android:layout_width="match_parent"
+            tw.org.ctssf.app.android:layout_height="24.795pt"
+            tw.org.ctssf.app.android:layout_margin="0.315pt"
+            tw.org.ctssf.app.android:layout_weight="1"
+            tw.org.ctssf.app.android:background="@tw.org.ctssf.app.android:color/white"
+            tw.org.ctssf.app.android:gravity="center"
+            tw.org.ctssf.app.android:text="Team Home"
+            tw.org.ctssf.app.android:textColor="#8C4141"
+            tw.org.ctssf.app.android:textSize="4.95pt"
+            tw.org.ctssf.app.android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/team_away"
-            android:layout_width="match_parent"
-            android:layout_height="24.795pt"
-            android:layout_margin="0.315pt"
-            android:layout_weight="1"
-            android:background="@android:color/white"
-            android:gravity="center"
-            android:text="Team Away"
-            android:textColor="#8C4141"
-            android:textSize="4.95pt"
-            android:textStyle="bold" />
+            tw.org.ctssf.app.android:id="@+id/team_away"
+            tw.org.ctssf.app.android:layout_width="match_parent"
+            tw.org.ctssf.app.android:layout_height="24.795pt"
+            tw.org.ctssf.app.android:layout_margin="0.315pt"
+            tw.org.ctssf.app.android:layout_weight="1"
+            tw.org.ctssf.app.android:background="@tw.org.ctssf.app.android:color/white"
+            tw.org.ctssf.app.android:gravity="center"
+            tw.org.ctssf.app.android:text="Team Away"
+            tw.org.ctssf.app.android:textColor="#8C4141"
+            tw.org.ctssf.app.android:textSize="4.95pt"
+            tw.org.ctssf.app.android:textStyle="bold" />
     </LinearLayout>
+    -->
 
     <ListView
         android:id="@+id/listview"

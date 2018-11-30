@@ -47,7 +47,7 @@
             android:textSize="5.265pt"
             android:text="vv"/>
     </RelativeLayout>
-    <com.asana.hbl.views.CircularImageView
+    <tw.org.ctssf.app.android.views.CircularImageView
         android:id="@+id/iv"
         android:layout_width="20.835pt"
         android:layout_height="20.835pt"

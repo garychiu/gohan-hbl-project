@@ -15,7 +15,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="2">
-                <com.asana.hbl.views.CircularImageView
+                <tw.org.ctssf.app.android.views.CircularImageView
                     android:id="@+id/iv_team"
                     android:layout_width="21.6pt"
                     android:layout_height="21.6pt" />
