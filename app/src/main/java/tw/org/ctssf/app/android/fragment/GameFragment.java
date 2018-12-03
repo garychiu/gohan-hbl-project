@@ -115,6 +115,16 @@ public class GameFragment extends Fragment {
                 mListPop.show();
             }
         });
+
+        mDreoDownIndicator.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDreoDownIndicator.animate()
+                        .setDuration(Utils.ROTATION_ANIM_DURATION)
+                        .rotationBy(180).start();
+                mListPop.show();
+            }
+        });
         mViewPager =  (ViewPager) view.findViewById(tw.org.ctssf.app.android.R.id.view_pager);
         mTabLayout = (TabLayout) view.findViewById(tw.org.ctssf.app.android.R.id.simpleTabLayout);
         mTitle.setText(mList.get(0));

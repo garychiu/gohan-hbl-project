@@ -444,7 +444,11 @@ public class AnalysisFragment extends Fragment {
             }
 
             if(isRoster()){
-                HBLImageLoader.loadPlayerImage(getActivity().getApplicationContext(), "", holder.iv_team);
+                try {
+                    HBLImageLoader.loadPlayerImage(getActivity().getApplicationContext(), (mListData.get(position).getString("profilePicture")), holder.iv_team);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
                 try {
                     holder.tv_team_name.setText(mListData.get(position).getString("name_alt"));
@@ -510,7 +514,9 @@ public class AnalysisFragment extends Fragment {
                         texToShow = String.valueOf(b);
                     }else if(mDataID.equals("OPPG")){
                         double a = (new BigDecimal(mListData.get(position).getString((mGroupDataMap.get(mDataID))))).doubleValue();
-                        texToShow = String.valueOf(Double.valueOf(a));
+                        DecimalFormat df = new DecimalFormat("######0.00");
+                        int b = (int)(Double.valueOf(df.format(a))*100);
+                        texToShow = String.valueOf(b);
                     } else {
                         double a = Double.valueOf(mListData.get(position).getString((mGroupDataMap.get(mDataID))));
                         DecimalFormat df = new DecimalFormat("######0.00");
