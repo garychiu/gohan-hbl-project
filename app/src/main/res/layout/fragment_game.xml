@@ -15,7 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="13.635pt"
-            android:layout_marginLeft="79.515pt"
+            android:layout_centerHorizontal="true"
             android:layout_marginBottom="11.25pt">
             <TextView
                 android:id="@+id/titles"
@@ -23,17 +23,17 @@
                 android:layout_height="wrap_content"
                 android:textSize="6.75pt"
                 android:text="@string/title_games" />
-            <ImageView
-                android:id="@+id/indicator"
-                android:layout_toRightOf="@+id/titles"
-                android:layout_width="8.235pt"
-                android:layout_height="4.5pt"
-                android:layout_marginTop="15.3pt"
-                android:layout_marginLeft="7.785pt"
-                android:layout_alignBottom="@+id/titles"
-                android:layout_marginBottom="2pt"
-                android:background="@mipmap/expand_button"/>
         </RelativeLayout>
+        <ImageView
+            android:id="@+id/indicator"
+            android:layout_toRightOf="@+id/spinner_games"
+            android:layout_width="8.235pt"
+            android:layout_height="4.5pt"
+            android:layout_marginTop="15.3pt"
+            android:layout_marginLeft="7.785pt"
+            android:layout_alignBottom="@+id/spinner_games"
+            android:layout_marginBottom="2pt"
+            android:background="@mipmap/expand_button"/>
      </RelativeLayout>
     <android.support.design.widget.TabLayout
         android:id="@+id/simpleTabLayout"

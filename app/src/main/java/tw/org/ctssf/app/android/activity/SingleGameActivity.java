@@ -182,10 +182,11 @@ public class SingleGameActivity extends BaseActivity {
         tab2.setText(tw.org.ctssf.app.android.R.string.game_data);
         mTabLayout.addTab(tab2);
 
+        /*
         TabLayout.Tab tab3 = mTabLayout.newTab();
         tab3.setText(tw.org.ctssf.app.android.R.string.play_by_play);
         mTabLayout.addTab(tab3);
-
+        */
 
         mTabLayout.setTabTextColors(ContextCompat.getColor(this, tw.org.ctssf.app.android.R.color.colorCustomTabTextUnSelected),ContextCompat.getColor(this, tw.org.ctssf.app.android.R.color.colorCustomTabTextSelected));
         mTabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {

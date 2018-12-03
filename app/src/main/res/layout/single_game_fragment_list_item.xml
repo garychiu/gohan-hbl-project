@@ -5,11 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10.96125pt"
-        android:layout_marginRight="10.96125pt"
+        android:layout_weight="1"
         >
         <tw.org.ctssf.app.android.views.CircularImageView
             android:id="@+id/iv1"
@@ -23,52 +27,61 @@
             android:id="@+id/tv11"
             android:layout_toRightOf="@+id/iv1"
             android:layout_width="11.385pt"
-            android:layout_height="8.235pt"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="7.2pt"
             android:layout_marginTop="16.65pt"
             android:layout_marginBottom="11.25pt"
             android:text="11"
             android:textColor="#6193AF"/>
+        </RelativeLayout>
         <TextView
             android:id="@+id/tv12"
-            android:layout_toRightOf="@+id/tv11"
-            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
             android:layout_height="8.235pt"
-            android:layout_marginLeft="33.615pt"
             android:layout_marginTop="16.335pt"
             android:layout_marginBottom="12.915pt"
             android:text="@string/score"
+            android:gravity="center"
             android:textColor="@android:color/black"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10.96125pt"
+        android:layout_alignParentRight="true"
+        android:layout_weight="1">
+        <tw.org.ctssf.app.android.views.CircularImageView
+            android:id="@+id/iv2"
+            android:layout_alignParentRight="true"
+            app:offsetY="30"
+            android:layout_width="24.615pt"
+            android:layout_height="24.615pt"
+            android:layout_marginTop="6.885pt"
+            android:layout_marginBottom="4.635pt"
+            android:layout_marginLeft="6.165pt"
+            />
         <TextView
             android:id="@+id/tv13"
-            android:layout_toRightOf="@+id/tv12"
+            android:layout_toLeftOf="@+id/iv2"
+            android:layout_marginRight="7.2pt"
             android:layout_width="11.385pt"
             android:layout_height="8.235pt"
-            android:layout_marginLeft="34.065pt"
             android:layout_marginTop="15.165pt"
             android:layout_marginBottom="12.735pt"
             android:text="13"
             android:textColor="#F64E4E"/>
-        <tw.org.ctssf.app.android.views.CircularImageView
-            android:id="@+id/iv2"
-            app:offsetY="30"
-            android:layout_toRightOf="@+id/tv13"
-            android:layout_width="24.615pt"
-            android:layout_height="24.615pt"
-            android:layout_marginLeft="6.165pt"
-            android:layout_marginTop="6.435pt"
-            android:layout_marginBottom="5.085pt"
-            />
     </RelativeLayout>
-    <RelativeLayout
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="13.365pt"
-        android:layout_marginRight="11.5625pt"
+        android:layout_marginRight="13.365pt"
+        android:orientation="horizontal"
         >
         <TextView
             android:id="@+id/tv21"
-            android:layout_width="21.95pt"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="1.035pt"
             android:text="21"
@@ -76,32 +89,32 @@
         <LinearLayout
             android:id="@+id/score_bar"
             android:orientation="horizontal"
-            android:layout_toRightOf="@+id/tv21"
             android:layout_marginTop="1.035pt"
             android:layout_marginBottom="1.665pt"
             android:layout_marginLeft="16.515pt"
+            android:layout_marginRight="16.515pt"
             android:layout_width="90.765pt"
-            android:layout_height="4.185pt">
+            android:layout_height="4.185pt"
+            >
             <View
                 android:id="@+id/score_bar_left"
-                android:layout_width="wrap_content"
+                android:layout_width="1pt"
                 android:layout_height="match_parent"
                 android:background="@drawable/round_corner_left"/>
 
             <View
                 android:id="@+id/score_bar_right"
-                android:layout_width="wrap_content"
+                android:layout_width="1pt"
                 android:layout_height="match_parent"
                 android:background="@drawable/round_corner_right" />
         </LinearLayout>
         <TextView
             android:id="@+id/tv22"
-            android:layout_toRightOf="@+id/score_bar"
-            android:layout_width="21.95pt"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2.115pt"
-            android:layout_marginLeft="15.165pt"
+            android:layout_marginBottom="1.035pt"
             android:text="22"
             android:textColor="@android:color/black"/>
-    </RelativeLayout>
+    </LinearLayout>
 </LinearLayout>

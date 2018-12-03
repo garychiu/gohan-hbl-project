@@ -43,6 +43,7 @@ public class CircularImageView extends com.android.volley.toolbox.NetworkImageVi
 
     private boolean mInitialized;
     private boolean mPressed;
+    private boolean mClickable = false;
     private boolean mHighlightEnable;
     private float mOffsetX= 0;
     private float mOffsetY= 0;
@@ -126,6 +127,9 @@ public class CircularImageView extends com.android.volley.toolbox.NetworkImageVi
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if(!mClickable){
+            return super.onTouchEvent(event);
+        }
         boolean processed = false;
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:

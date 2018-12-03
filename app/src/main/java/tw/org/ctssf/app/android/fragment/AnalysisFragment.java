@@ -35,6 +35,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -46,17 +48,17 @@ import java.util.Vector;
 
 public class AnalysisFragment extends Fragment {
     public static final String TAG = "HBL-AnalysisFragment";
-    private  final String EVENT_NAME = "points";
     private ListPopupWindow mListPop, mListPop2, mListPop3;
     TextView mTv1, mTv2, mTv3;
     TextView mItemTitle1, mItemTitle2, mItemTitle3, mItemTitle4, mItemTitle5;
     JSONArray mStageList, mGroupList;
     JSONArray mData;
     int mSelectedStage, mSelectedGroup;
-    RelativeLayout mDropMenu, mDropMenu2, mDropMenu3;
+    RelativeLayout mDropMenu, mDropMenu2, mDropMenu3, mNoGameGameDataLayout;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private ImageView mDreoDownIndicator, mDreoDownIndicator2, mDreoDownIndicator3;
+    boolean mShouldInitTabLayout = false;
 
     LinkedHashMap<String, String> mGroupItenmList = new LinkedHashMap<String, String>(){
         {
@@ -100,6 +102,7 @@ public class AnalysisFragment extends Fragment {
     }
 
     private void initView(View view){
+        mNoGameGameDataLayout = (RelativeLayout)view.findViewById(tw.org.ctssf.app.android.R.id.no_game_layout);
         mTabLayout = (TabLayout) view.findViewById(tw.org.ctssf.app.android.R.id.simpleTabLayout);
         mViewPager = (ViewPager)view.findViewById(tw.org.ctssf.app.android.R.id.view_pager);
         mItemTitle1 = (TextView)view.findViewById(tw.org.ctssf.app.android.R.id.item_title1);
@@ -145,9 +148,8 @@ public class AnalysisFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mTv3.setText((String)parent.getAdapter().getItem(position));
-                getDataList(mSelectedStage, mSelectedGroup, 10);
                 initTabLayout();
-
+                getDataList(mSelectedStage, mSelectedGroup, 10);
                 mListPop3.dismiss();
             }
         });
@@ -286,11 +288,10 @@ public class AnalysisFragment extends Fragment {
         private List<JSONObject> mListData= new ArrayList<JSONObject>();
         private String mDataID;
 
-
         private final LinkedHashMap<String, String> mGroupDataMap = new LinkedHashMap<String, String>(){
             {
                 put("PPG", "points");
-                put("OPPG", "points");
+                put("OPPG", "opponentPoints");
                 put("2P%", "two_pct");
                 put("3P%", "trey_pct");
                 put("FT%", "ft_pct");
@@ -332,25 +333,79 @@ public class AnalysisFragment extends Fragment {
 
         public CusomListAdapter(Context context, JSONArray data, String dataID){
             this.mDataID = dataID;
-            initDataList(data);
+            //initDataList(data);
             mInflater = LayoutInflater.from(context);
         }
 
-        public void updateDataList(JSONArray data){
-            initDataList(data);
-            notifyDataSetChanged();
+        public void updateDataList(int selectedStage, int seletedGroup, int returnCount){
+            initDataList(selectedStage, seletedGroup, returnCount, true);
+            //notifyDataSetChanged();
         }
 
-        private void initDataList(JSONArray data){
-            if(data == null) return;
-            mListData.clear();
-            for(int i=0; i<data.length(); i++){
-                try {
-                    JSONObject jsonObject = (JSONObject)data.get(i);
-                    mListData.add((JSONObject)data.get(i));
-                } catch (JSONException e) {
-                    e.printStackTrace();
+        private void initDataList(int selectedStage, int seletedGroup, int returnCount, final boolean isUpdateData){
+            if(selectedStage < 0 || seletedGroup < 0 || mStageList == null || mGroupList == null){
+                return;
+            }
+
+            String stageSn = null;
+            String groupSn = null;
+
+            JSONObject jsonObject = null;
+            try {
+                jsonObject = (JSONObject)mStageList.get(selectedStage);
+                stageSn = jsonObject.getString("sn");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                jsonObject = (JSONObject)mGroupList.get(seletedGroup);
+                groupSn = jsonObject.getString("sn");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            if(stageSn == null || groupSn == null) return;
+            HttpClient httpClient = new HttpClient();
+            HttpClient.HttpResponseCallback callback = new HttpClient.HttpResponseCallback() {
+                @Override
+                public void onResponse(Bundle result) {
+                    try {
+                        JSONArray data = new JSONArray(result.getString("response"));
+
+                        if(getActivity() != null) {
+                            mListData.clear();
+                            if(data == null || data.length() == 0){
+                                mNoGameGameDataLayout.setVisibility(View.VISIBLE);
+                            }else{
+                                for(int i=0; i<data.length(); i++){
+                                    try {
+                                        JSONObject jsonObject = (JSONObject)data.get(i);
+                                        mListData.add((JSONObject)data.get(i));
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                mNoGameGameDataLayout.setVisibility(View.GONE);
+                            }
+
+                        }
+
+                        if(isUpdateData) {
+                            notifyDataSetChanged();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
+            };
+
+            if(isRoster()){
+                httpClient.async_query_GET(RestApi.getRosterAverageListByStageAndGroup(stageSn, groupSn, mRosterDataMap.get(mDataID), returnCount), null, callback);
+                //Log.v("Gary", "api: " + RestApi.getRosterAverageListByStageAndGroup(stageSn, groupSn, mRosterDataMap.get(mDataID), returnCount));
+            }else{
+                httpClient.async_query_GET(RestApi.getTeamAverageListByStageAndGroup(stageSn, groupSn, mGroupDataMap.get(mDataID), returnCount), null, callback);
+                //Log.v("Gary", "api: " + RestApi.getTeamAverageListByStageAndGroup(stageSn, groupSn, mGroupDataMap.get(mDataID), returnCount));
             }
         }
 
@@ -442,16 +497,24 @@ public class AnalysisFragment extends Fragment {
             try {
                 String texToShow = "";
                 if(isRoster()) {
-                    texToShow = mListData.get(position).getString((mRosterDataMap.get(mDataID)));
-                    if(texToShow.length() > 5){
-                        texToShow = texToShow.substring(0, 4);
-                    }
+                    double a = Double.valueOf(mListData.get(position).getString((mRosterDataMap.get(mDataID))));
+                    DecimalFormat df = new DecimalFormat("######0.00");
+                    texToShow = String.valueOf(Double.valueOf(df.format(a)));
                     holder.tv4.setText(texToShow);
 
                 }else{
-                    texToShow = mListData.get(position).getString((mGroupDataMap.get(mDataID)));
-                    if(texToShow.length() > 4){
-                        texToShow = texToShow.substring(0, 4);
+                    if(mDataID.equals("2P%") || mDataID.equals("3P%") || mDataID.equals("FT%")){
+                        double a = Double.valueOf(mListData.get(position).getString((mGroupDataMap.get(mDataID))));
+                        DecimalFormat df = new DecimalFormat("######0.00");
+                        int b = (int)(Double.valueOf(df.format(a))*100);
+                        texToShow = String.valueOf(b);
+                    }else if(mDataID.equals("OPPG")){
+                        double a = (new BigDecimal(mListData.get(position).getString((mGroupDataMap.get(mDataID))))).doubleValue();
+                        texToShow = String.valueOf(Double.valueOf(a));
+                    } else {
+                        double a = Double.valueOf(mListData.get(position).getString((mGroupDataMap.get(mDataID))));
+                        DecimalFormat df = new DecimalFormat("######0.00");
+                        texToShow = String.valueOf(Double.valueOf(df.format(a)));
                     }
                     holder.tv4.setText(texToShow);
                     holder.tv4.setText(texToShow);
@@ -618,55 +681,11 @@ public class AnalysisFragment extends Fragment {
 
 
     private void getDataList(int selectedStage, int seletedGroup, int returnCount){
-        if(selectedStage < 0 || seletedGroup < 0 || mStageList == null || mGroupList == null){
-            return;
+        Vector<View> pages = ((CustomPagerAdapter)mViewPager.getAdapter()).pages;
+        for(View view : pages){
+            CusomListAdapter adapter = (CusomListAdapter)((ListView)view).getAdapter();
+            adapter.updateDataList(selectedStage, seletedGroup, returnCount);
         }
-
-        String stageSn = null;
-        String groupSn = null;
-
-        JSONObject jsonObject = null;
-        try {
-            jsonObject = (JSONObject)mStageList.get(selectedStage);
-            stageSn = jsonObject.getString("sn");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            jsonObject = (JSONObject)mGroupList.get(seletedGroup);
-            groupSn = jsonObject.getString("sn");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        if(stageSn == null || groupSn == null) return;
-
-        HttpClient httpClient = new HttpClient();
-        HttpClient.HttpResponseCallback callback = new HttpClient.HttpResponseCallback() {
-            @Override
-            public void onResponse(Bundle result) {
-                try {
-                    mData = new JSONArray(result.getString("response"));
-                    if(getActivity() != null) {
-                        Vector<View> pages = ((CustomPagerAdapter)mViewPager.getAdapter()).pages;
-                        for(View view : pages){
-                            CusomListAdapter adapter = (CusomListAdapter)((ListView)view).getAdapter();
-                            adapter.updateDataList(mData);
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-
-        if(isRoster()){
-            httpClient.async_query_GET(RestApi.getRosterAverageListByStageAndGroup(stageSn, groupSn, EVENT_NAME, returnCount), null, callback);
-        }else{
-            httpClient.async_query_GET(RestApi.getTeamAverageListByStageAndGroup(stageSn, groupSn, EVENT_NAME, returnCount), null, callback);
-        }
-
     }
 
     private boolean isRoster(){

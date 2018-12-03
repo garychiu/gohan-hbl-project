@@ -191,15 +191,16 @@ public class DashboardFragment extends Fragment {
                         JSONObject jsonObject = (JSONObject)data.get(i);
                         if(Integer.valueOf(jsonObject.getString("rank")) == rank){
                             mListData.add(jsonObject);
-                            ja.remove(i);
                             rank ++;
                         }
                     } catch (Exception e) {
                         errorCount ++;
                         e.printStackTrace();
                     }
+
                 }
-            }while(ja.length() > 0);
+
+            }while(rank < ja.length());
         }
 
         @Override
