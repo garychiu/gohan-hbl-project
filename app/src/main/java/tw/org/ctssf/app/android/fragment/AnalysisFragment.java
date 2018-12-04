@@ -54,7 +54,7 @@ public class AnalysisFragment extends Fragment {
     JSONArray mStageList, mGroupList;
     JSONArray mData;
     int mSelectedStage, mSelectedGroup;
-    RelativeLayout mDropMenu, mDropMenu2, mDropMenu3, mNoGameGameDataLayout;
+    RelativeLayout mDropMenu, mDropMenu2, mDropMenu3, mNoGameDataLayout;
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private ImageView mDreoDownIndicator, mDreoDownIndicator2, mDreoDownIndicator3;
@@ -102,7 +102,7 @@ public class AnalysisFragment extends Fragment {
     }
 
     private void initView(View view){
-        mNoGameGameDataLayout = (RelativeLayout)view.findViewById(tw.org.ctssf.app.android.R.id.no_game_layout);
+        mNoGameDataLayout = (RelativeLayout)view.findViewById(tw.org.ctssf.app.android.R.id.no_game_layout);
         mTabLayout = (TabLayout) view.findViewById(tw.org.ctssf.app.android.R.id.simpleTabLayout);
         mViewPager = (ViewPager)view.findViewById(tw.org.ctssf.app.android.R.id.view_pager);
         mItemTitle1 = (TextView)view.findViewById(tw.org.ctssf.app.android.R.id.item_title1);
@@ -376,7 +376,7 @@ public class AnalysisFragment extends Fragment {
                         if(getActivity() != null) {
                             mListData.clear();
                             if(data == null || data.length() == 0){
-                                mNoGameGameDataLayout.setVisibility(View.VISIBLE);
+                                mNoGameDataLayout.setVisibility(View.VISIBLE);
                             }else{
                                 for(int i=0; i<data.length(); i++){
                                     try {
@@ -386,7 +386,7 @@ public class AnalysisFragment extends Fragment {
                                         e.printStackTrace();
                                     }
                                 }
-                                mNoGameGameDataLayout.setVisibility(View.GONE);
+                                mNoGameDataLayout.setVisibility(View.GONE);
                             }
 
                         }
@@ -402,10 +402,8 @@ public class AnalysisFragment extends Fragment {
 
             if(isRoster()){
                 httpClient.async_query_GET(RestApi.getRosterAverageListByStageAndGroup(stageSn, groupSn, mRosterDataMap.get(mDataID), returnCount), null, callback);
-                //Log.v("Gary", "api: " + RestApi.getRosterAverageListByStageAndGroup(stageSn, groupSn, mRosterDataMap.get(mDataID), returnCount));
             }else{
                 httpClient.async_query_GET(RestApi.getTeamAverageListByStageAndGroup(stageSn, groupSn, mGroupDataMap.get(mDataID), returnCount), null, callback);
-                //Log.v("Gary", "api: " + RestApi.getTeamAverageListByStageAndGroup(stageSn, groupSn, mGroupDataMap.get(mDataID), returnCount));
             }
         }
 
@@ -463,14 +461,17 @@ public class AnalysisFragment extends Fragment {
                     e.printStackTrace();
                 }
             }else{
-                HBLImageLoader.loadTeamImage(getActivity().getApplicationContext(), "", holder.iv_team);
+                try {
+                    HBLImageLoader.loadTeamImage(getActivity().getApplicationContext(), mListData.get(position).getString("teamLogo"), holder.iv_team);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
                 try {
                     holder.tv_team_name.setText(mListData.get(position).getString("team_name_alt"));
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
                 holder.tv_11.setVisibility(View.GONE);
             }
 
@@ -515,14 +516,12 @@ public class AnalysisFragment extends Fragment {
                     }else if(mDataID.equals("OPPG")){
                         double a = (new BigDecimal(mListData.get(position).getString((mGroupDataMap.get(mDataID))))).doubleValue();
                         DecimalFormat df = new DecimalFormat("######0.00");
-                        int b = (int)(Double.valueOf(df.format(a))*100);
-                        texToShow = String.valueOf(b);
+                        texToShow = String.valueOf(Double.valueOf(df.format(a)));
                     } else {
                         double a = Double.valueOf(mListData.get(position).getString((mGroupDataMap.get(mDataID))));
                         DecimalFormat df = new DecimalFormat("######0.00");
                         texToShow = String.valueOf(Double.valueOf(df.format(a)));
                     }
-                    holder.tv4.setText(texToShow);
                     holder.tv4.setText(texToShow);
                 }
             } catch (JSONException e) {

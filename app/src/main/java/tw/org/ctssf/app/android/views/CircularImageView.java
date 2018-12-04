@@ -45,8 +45,8 @@ public class CircularImageView extends com.android.volley.toolbox.NetworkImageVi
     private boolean mPressed;
     private boolean mClickable = false;
     private boolean mHighlightEnable;
-    private float mOffsetX= 0;
-    private float mOffsetY= 0;
+    public float mOffsetX= 0;
+    public float mOffsetY= 0;
     public CircularImageView(Context context) {
         super(context);
     }

@@ -37,14 +37,11 @@ public class myImageLoader extends ImageLoader {
                     Bitmap bmp = response.getBitmap();
                     int oldwidth = bmp.getWidth();
                     int oldheight = bmp.getHeight();
-                    //Log.v("Gary","Sebmp size is :" + oldwidth + "," + oldheight);
                     boolean needScalSize = false;
                     if(oldwidth > 1000  || oldheight >1000){
                         needScalSize = true;
                     }
                     if(needScalSize) {
-                        //float scaleWidth = 80 / (float) oldwidth;
-                        //float scaleHeight = 100 / (float) oldheight;
                         float scaleWidth = 0.1f;
                         float scaleHeight = 0.1f;
 

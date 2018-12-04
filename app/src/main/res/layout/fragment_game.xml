@@ -8,13 +8,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorCustomTitle"
-        android:clickable="true"
         android:spinnerMode="dropdown">
         <RelativeLayout
             android:id="@+id/spinner_games"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="13.635pt"
+            android:clickable="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="11.25pt">
             <TextView
@@ -36,6 +36,9 @@
             android:clickable="true"
             android:background="@mipmap/expand_button"/>
      </RelativeLayout>
+    <include android:id="@+id/no_game_layout"
+        layout="@layout/no_game_layout"
+        android:visibility="gone"/>
     <android.support.design.widget.TabLayout
         android:id="@+id/simpleTabLayout"
         android:layout_width="match_parent"

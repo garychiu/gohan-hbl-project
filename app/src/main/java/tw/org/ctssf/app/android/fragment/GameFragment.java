@@ -56,6 +56,7 @@ public class GameFragment extends Fragment {
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private ImageView mDreoDownIndicator;
+    private RelativeLayout mNoGameDataLayout;
     public static GameFragment newInsTance(){
         GameFragment fragment = new GameFragment();
         return fragment;
@@ -65,6 +66,7 @@ public class GameFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         Log.v(TAG, "onCreateView");
         View view = inflater.inflate(tw.org.ctssf.app.android.R.layout.fragment_game, container, false);
+        mNoGameDataLayout = (RelativeLayout)view.findViewById(R.id.no_game_layout);
         mGamesSpinner = (RelativeLayout)view.findViewById(tw.org.ctssf.app.android.R.id.spinner_games);
         mTitle = (TextView)view.findViewById(tw.org.ctssf.app.android.R.id.titles);
         mDreoDownIndicator = (ImageView)view.findViewById(tw.org.ctssf.app.android.R.id.indicator);
@@ -119,10 +121,7 @@ public class GameFragment extends Fragment {
         mDreoDownIndicator.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDreoDownIndicator.animate()
-                        .setDuration(Utils.ROTATION_ANIM_DURATION)
-                        .rotationBy(180).start();
-                mListPop.show();
+                mGamesSpinner.performClick();
             }
         });
         mViewPager =  (ViewPager) view.findViewById(tw.org.ctssf.app.android.R.id.view_pager);
@@ -143,6 +142,7 @@ public class GameFragment extends Fragment {
             public void onResponse(String result) {
                 if (result != null) {
                     try {
+                        mNoGameDataLayout.setVisibility(View.GONE);
                         JSONObject jsonObject = new JSONObject(result);
                         initViewPager(jsonObject);
                         mViewPager.setCurrentItem((int)mTabLayout.getTag());
@@ -167,8 +167,13 @@ public class GameFragment extends Fragment {
                                     JSONObject jsonObject = null;
                                     jsonObject = new JSONObject(result.getString("response"));
                                     if(getActivity() != null) {
-                                        initViewPager(jsonObject);
-                                        mViewPager.setCurrentItem((int)mTabLayout.getTag());
+                                        if(jsonObject == null) {
+                                            mNoGameDataLayout.setVisibility(View.VISIBLE);
+                                        } else {
+                                            mNoGameDataLayout.setVisibility(View.GONE);
+                                            initViewPager(jsonObject);
+                                            mViewPager.setCurrentItem((int) mTabLayout.getTag());
+                                        }
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -230,6 +235,8 @@ public class GameFragment extends Fragment {
                     jsonObject = new JSONObject(result.getString("response"));
                     if(getActivity() != null && jsonObject != null) {
                         initViewPager(jsonObject);
+                    }else if(getActivity() != null && jsonObject == null){
+                        mNoGameDataLayout.setVisibility(View.VISIBLE);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

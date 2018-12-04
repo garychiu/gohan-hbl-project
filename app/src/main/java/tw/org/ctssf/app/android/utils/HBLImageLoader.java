@@ -7,6 +7,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import tw.org.ctssf.app.android.R;
 import tw.org.ctssf.app.android.model.VolleyRequestQueue;
 import tw.org.ctssf.app.android.model.myImageLoader;
+import tw.org.ctssf.app.android.views.CircularImageView;
 
 /**
  * Created by Gary on 2018/10/16.
@@ -14,6 +15,7 @@ import tw.org.ctssf.app.android.model.myImageLoader;
 
 public class HBLImageLoader {
     public static void loadTeamImage(Context context, String imageUrl, NetworkImageView v){
+        ((CircularImageView)v).mOffsetY = 0;
         ImageLoader imageLoader = VolleyRequestQueue.getInstance(context)
                 .getImageLoader();
         imageLoader.get(imageUrl, myImageLoader.getImageListener(v,

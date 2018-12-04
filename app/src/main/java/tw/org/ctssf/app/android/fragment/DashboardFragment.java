@@ -44,6 +44,7 @@ public class DashboardFragment extends Fragment {
     JSONArray mData;
     JSONArray mStageList, mGroupList;
     RelativeLayout mDropMenu1, mDropMenu2, mDropMenu3;
+    RelativeLayout mNoGameDataLayout;
     private ListPopupWindow mListPop1, mListPop2, mListPop3;
     TextView mTv1, mTv2, mTv3;
     int mSelectedStage, mSelectedGroup;
@@ -60,6 +61,7 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         Log.v(TAG, "onCreateView");
         View view = inflater.inflate(tw.org.ctssf.app.android.R.layout.fragment_dashboard, container, false);
+        mNoGameDataLayout = (RelativeLayout)view.findViewById(R.id.no_game_layout);
         mDropMenu1 = (RelativeLayout)view.findViewById(tw.org.ctssf.app.android.R.id.drop_menu1);
         mDropMenu2 = (RelativeLayout)view.findViewById(tw.org.ctssf.app.android.R.id.drop_menu2);
         mDropMenu3 = (RelativeLayout)view.findViewById(tw.org.ctssf.app.android.R.id.drop_menu3);
@@ -142,7 +144,13 @@ public class DashboardFragment extends Fragment {
                         }
                     }
                     if(getActivity() != null) {
-                        initListView(mData);
+                        if(mData == null || mData.length() == 0){
+                            mNoGameDataLayout.setVisibility(View.VISIBLE);
+                        }else{
+                            mNoGameDataLayout.setVisibility(View.GONE);
+                            initListView(mData);
+                        }
+
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
