@@ -19,7 +19,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import tw.org.ctssf.app.android.R;
 import tw.org.ctssf.app.android.model.HBLSingleGameData;
 import tw.org.ctssf.app.android.utils.Utils;
 

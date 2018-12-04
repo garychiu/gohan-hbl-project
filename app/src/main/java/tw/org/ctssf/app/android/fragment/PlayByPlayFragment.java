@@ -21,7 +21,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import tw.org.ctssf.app.android.R;
 import tw.org.ctssf.app.android.utils.HBLImageLoader;
 import tw.org.ctssf.app.android.utils.Utils;
 import tw.org.ctssf.app.android.views.CircularImageView;

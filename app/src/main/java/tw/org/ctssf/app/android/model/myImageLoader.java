@@ -2,7 +2,6 @@ package tw.org.ctssf.app.android.model;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import android.util.Log;
 import android.widget.ImageView;
 
 import com.android.volley.RequestQueue;
@@ -48,7 +47,6 @@ public class myImageLoader extends ImageLoader {
                         Matrix matrix = new Matrix();
                         matrix.postScale(scaleWidth, scaleHeight);
                         Bitmap resizedBitmap = Bitmap.createBitmap(bmp, 0, 0, oldwidth,oldheight, matrix, true);
-                        //Log.v("Gary","SettingManager====> set scale value : "+ resizedBitmap.getWidth()  + " : " + resizedBitmap.getHeight());
                         view.setImageBitmap(resizedBitmap);
                     }else{
                         view.setImageBitmap(bmp);

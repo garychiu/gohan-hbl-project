@@ -24,7 +24,6 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import tw.org.ctssf.app.android.R;
 import tw.org.ctssf.app.android.utils.HBLImageLoader;
 import tw.org.ctssf.app.android.utils.HttpClient;
 import tw.org.ctssf.app.android.utils.RestApi;
@@ -58,7 +57,6 @@ public class AnalysisFragment extends Fragment {
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private ImageView mDreoDownIndicator, mDreoDownIndicator2, mDreoDownIndicator3;
-    boolean mShouldInitTabLayout = false;
 
     LinkedHashMap<String, String> mGroupItenmList = new LinkedHashMap<String, String>(){
         {
@@ -250,7 +248,6 @@ public class AnalysisFragment extends Fragment {
     }
 
     private class CustomPagerAdapter extends PagerAdapter {
-
         private Context mContext;
         private Vector<View> pages;
 
@@ -390,7 +387,6 @@ public class AnalysisFragment extends Fragment {
                             }
 
                         }
-
                         if(isUpdateData) {
                             notifyDataSetChanged();
                         }
@@ -513,11 +509,11 @@ public class AnalysisFragment extends Fragment {
                         DecimalFormat df = new DecimalFormat("######0.00");
                         int b = (int)(Double.valueOf(df.format(a))*100);
                         texToShow = String.valueOf(b);
-                    }else if(mDataID.equals("OPPG")){
+                    }/*else if(mDataID.equals("OPPG")){
                         double a = (new BigDecimal(mListData.get(position).getString((mGroupDataMap.get(mDataID))))).doubleValue();
                         DecimalFormat df = new DecimalFormat("######0.00");
                         texToShow = String.valueOf(Double.valueOf(df.format(a)));
-                    } else {
+                    }*/ else {
                         double a = Double.valueOf(mListData.get(position).getString((mGroupDataMap.get(mDataID))));
                         DecimalFormat df = new DecimalFormat("######0.00");
                         texToShow = String.valueOf(Double.valueOf(df.format(a)));

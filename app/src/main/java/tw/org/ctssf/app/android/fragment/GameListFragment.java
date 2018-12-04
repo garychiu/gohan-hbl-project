@@ -14,7 +14,6 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import tw.org.ctssf.app.android.R;
 import tw.org.ctssf.app.android.activity.SingleGameActivity;
 import tw.org.ctssf.app.android.model.HblGames;
 import tw.org.ctssf.app.android.utils.HBLImageLoader;
@@ -34,7 +33,6 @@ import java.util.List;
 public class GameListFragment extends Fragment {
     public static final String EXTRA_TEXT = "arg";
     public static final String TAG = "HBL-GameListFragment";
-    public static String mTag;
     ListView mListView;
     List<HblGames> mDataList = new ArrayList<HblGames>();
     @Nullable
